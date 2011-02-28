@@ -45,12 +45,17 @@ while [ $moment -le $now ]; do
     #update to the revision just before the specified date
     hg up -d "<$moment 0"
 
-    #count the number of lines in all files in this directory
-    numlines=`find . -type f -name '*.java' -print0 | wc -l --files0-from=- | tail -n 1 | awk '{print $1}'`
+    if [ "$metric" = "lines" ]; then
+        result=`find . -type f -name '*.java' -print0 | wc -l --files0-from=- | tail -n 1 | awk '{print $1}'`
+    elif [ "$metric" = "ncss" ]; then
+        result=`javancss -recursive src/com | sed -e 's/.*: //'`
+    elif [ "$metric" = "avgccn" ]; then
+        result=`javancss -recursive -function src/com | grep 'Average Function CCN' | sed -e 's/.*: *//'`
+    fi
     
     #produce output in outfile
     pretty_date=`date +%Y-%m --date=@$moment`
-    echo "${pretty_date},${numlines}" >> $outfile
+    echo "${pretty_date},${result}" >> $outfile
     
     #prepare for next loop iteration by adding group_seconds
     moment=$(($moment+$group_seconds))
