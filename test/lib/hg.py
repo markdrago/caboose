@@ -16,14 +16,18 @@ def create_repo(directory=None, hg_ui=None):
     
     return (repo, directory, ui)
 
-def create_changesets(repo, num=1, hg_ui=None):
+def create_changesets(repo, num=1, hg_ui=None, dates=[]):
     if hg_ui is None:
         hg_ui = ui.ui()
 
     for i in range(num):
         filename = _create_random_file(repo.root)
         commands.add(hg_ui, repo, filename)
-        commands.commit(hg_ui, repo, message="creating %s" % (filename,))
+        
+        date=None
+        if i < len(dates):
+            date=dates[i]
+        commands.commit(hg_ui, repo, date=date, message="creating %s" % (filename,))
 
 def _create_random_file(directory):
     filename = path.join(directory, str(uuid4()))
