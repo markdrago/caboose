@@ -7,7 +7,7 @@ from shutil import rmtree
 from lib import hg
 from mercurial import commands
 
-from . import *
+from repository import HgSwitcher
 
 class HgSwitcherTests(TestCase):
     def setUp(self):
