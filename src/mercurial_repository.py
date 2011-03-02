@@ -16,6 +16,9 @@ class MercurialRepository(Repository):
 
     def switch_to_date(self, date):
         commands.update(self.ui, self.repo, date=date)
+    
+    def switch_to_before_date(self, date):
+        commands.update(self.ui, self.repo, date="<%s" % date)
 
     def get_working_directory_parent_revision(self):
         working_directory = self.repo[None]
