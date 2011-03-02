@@ -16,7 +16,7 @@ class RepositoryTests(TestCase):
         r.switch_to_before_date('2011-01-01')
     
     def test_get_mercurial_repo_from_factory_for_directory_with_hg_repo(self):
-        directory = mkdtemp('-gbtests')
+        directory = mkdtemp('-gb-rep-works-test')
         MercurialRepository(directory, init=True)
         repo = RepositoryFactory.get_repository(directory)
         eq_(MercurialRepository, type(repo))
@@ -24,7 +24,9 @@ class RepositoryTests(TestCase):
 
     @raises(Exception)
     def test_repository_factory_throws_for_directory_without_repo(self):
-        directory = mkdtemp('-gbtests')
-        repo = RepositoryFactory.get_repository(directory)
-        rmtree(directory)
+        directory = mkdtemp('-gb-rep-fails-correctly-test')
+        try:
+            repo = RepositoryFactory.get_repository(directory)
+        finally:
+            rmtree(directory)
 
