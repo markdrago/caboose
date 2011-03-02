@@ -8,3 +8,4 @@ class RepositoryFactory(object):
         if path.isdir(path.join(directory, '.hg')):
             return MercurialRepository(directory)
         raise Exception("No repository found in directory: %s" % directory)
+

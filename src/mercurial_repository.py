@@ -30,3 +30,4 @@ class MercurialRepository(Repository):
         
     def get_repo(self):
         return self.repo
+
