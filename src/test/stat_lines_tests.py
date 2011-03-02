@@ -17,4 +17,4 @@ class StatLinesTests(TestCase):
             f.close()
         stat = StatLines(directory)
         eq_(2, stat.get_stat())
-
+        rmtree(directory)
