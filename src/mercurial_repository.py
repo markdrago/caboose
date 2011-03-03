@@ -1,5 +1,6 @@
 import os
 from mercurial import hg, ui, commands
+from datetime import datetime
 
 from repository import Repository
 
@@ -19,6 +20,11 @@ class MercurialRepository(Repository):
     
     def switch_to_before_date(self, date):
         commands.update(self.ui, self.repo, date="<%s" % date)
+
+    def get_date_of_earliest_commit(self):
+        chgset = self.repo[0]
+        d = datetime.fromtimestamp(chgset.date()[0])
+        return d.strftime("%Y-%m-%d %H:%M:%S")
 
     def get_working_directory_parent_revision(self):
         working_directory = self.repo[None]

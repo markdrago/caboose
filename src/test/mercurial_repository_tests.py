@@ -45,6 +45,13 @@ class MercurialRepositoryTests(TestCase):
         hgrepo.switch_to_before_date('2011-02-02 04:04:04')
         eq_(1, hgrepo.get_working_directory_parent_revision())
 
+    def test_get_date_of_earliest_commit(self):
+        hgrepo = MercurialRepository(self.directory, init=True)
+        dates = ('2011-01-01 01:01:01', '2011-02-02 02:02:02', '2011-03-03 03:03:03')
+        self.create_test_changesets(hgrepo, 3, dates=dates)
+        d = hgrepo.get_date_of_earliest_commit()
+        eq_('2011-01-01 01:01:01', d)
+
     @nottest
     def create_test_changesets(self, repo, count=1, dates=[]):
         for i in range(count):
