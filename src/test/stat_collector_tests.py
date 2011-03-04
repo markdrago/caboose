@@ -14,8 +14,6 @@ from mercurial_repository import MercurialRepository
 #        hgrepo = MercurialRepository(directory, init=True)
 #        sc = StatCollector(hgrepo, directory, SimpleStat)
         
-
-
 class SimpleStat(object):
     def __init__(self, directory):
         pass

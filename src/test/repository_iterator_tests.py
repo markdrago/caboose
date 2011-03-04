@@ -4,8 +4,8 @@ from unittest import TestCase
 
 from datetime import datetime
 
-from repository import Repository
 from repository_iterator import RepositoryIterator
+from mock_date_repository import MockDateRepository
 
 class RepositoryIteratorTests(TestCase):
     def setUp(self):
@@ -35,15 +35,4 @@ class RepositoryIteratorTests(TestCase):
         self.ri.next()
         self.ri.next()
         self.ri.next()
-
-class MockDateRepository(Repository):
-    def __init__(self, date_revs):
-        self.date_revs = date_revs
-        self.latest_rev_requested = None
-    
-    def get_revision_before_date(self, date):
-        return self.date_revs[date]
-
-    def switch_to_revision(self, rev):
-        self.latest_rev_requested = rev
 
