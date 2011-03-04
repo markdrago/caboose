@@ -13,7 +13,7 @@ class StatLinesTests(TestCase):
     def test_proper_number_of_lines_are_counted_in_single_file(self):
         directory = mkdtemp("-gb-numlines-single-test")
         self._create_file_with_n_lines(directory, 2)
-        stat = StatLines(directory)
+        stat = StatLines((directory,))
         eq_(2, stat.get_stat())
         rmtree(directory)
 
@@ -21,16 +21,16 @@ class StatLinesTests(TestCase):
         directory = mkdtemp("-gb-numlines-multiple-test")
         self._create_file_with_n_lines(directory, 2)
         self._create_file_with_n_lines(directory, 3)
-        stat = StatLines(directory)
+        stat = StatLines((directory,))
         eq_(5, stat.get_stat())
         rmtree(directory)
     
-    def test_proper_number_of_lines_are_counted_in_multiple_dirs(self):
-        directory = mkdtemp("-gb-numlines-multiple-dir-test")
+    def test_proper_number_of_lines_are_counted_in_inner_dir(self):
+        directory = mkdtemp("-gb-numlines-inner-dir-test")
         inner = mkdtemp("-inner-dir", dir=directory)
         self._create_file_with_n_lines(directory, 2)
         self._create_file_with_n_lines(inner, 5)
-        stat = StatLines(directory)
+        stat = StatLines((directory,))
         eq_(7, stat.get_stat())
         rmtree(directory)
 
@@ -38,8 +38,21 @@ class StatLinesTests(TestCase):
         directory = mkdtemp("-gb-numlines-java-files-test")
         self._create_file_with_n_lines(directory, 2, suffix='.notjava')
         self._create_file_with_n_lines(directory, 5)
-        stat = StatLines(directory)
+        stat = StatLines((directory,))
         eq_(5, stat.get_stat())
+        rmtree(directory)
+    
+    def test_proper_number_of_lines_in_multiple_dirs(self):
+        directory = mkdtemp("-gb-numlines-multiple-dir-test")
+        inner1 = mkdtemp("-inner-dir1", dir=directory)
+        inner2 = mkdtemp("-inner-dir2", dir=directory)
+        inner3 = mkdtemp("-inner-dir3", dir=directory)
+        self._create_file_with_n_lines(directory, 2)
+        self._create_file_with_n_lines(inner1, 5)
+        self._create_file_with_n_lines(inner2, 8)
+        self._create_file_with_n_lines(inner3, 13)
+        stat = StatLines((inner1,inner3))
+        eq_(18, stat.get_stat())
         rmtree(directory)
     
     @nottest
