@@ -10,4 +10,5 @@ class RepositoryIterator(object):
         nextdate = self.date_iterator.next()
         rev = self.repo.get_revision_before_date(nextdate)
         self.repo.switch_to_revision(rev)
+        return nextdate
 

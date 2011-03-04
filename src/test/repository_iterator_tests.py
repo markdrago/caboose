@@ -20,13 +20,15 @@ class RepositoryIteratorTests(TestCase):
         self.ri = RepositoryIterator(self.repo, date_iterator=self.di)
 
     def test_repository_iterator_switches_to_first_revision(self):
-        self.ri.next()
+        date = self.ri.next()
         eq_(self.repo.latest_rev_requested, 0)
+        eq_(datetime(2011, 1, 1), date)
     
     def test_repository_iterator_switches_to_second_revision(self):
         self.ri.next()
-        self.ri.next()
+        date = self.ri.next()
         eq_(self.repo.latest_rev_requested, 1)
+        eq_(datetime(2011, 2, 2), date)
     
     @raises(StopIteration)
     def test_repository_iterator_throws_stop_iteration(self):
