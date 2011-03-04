@@ -54,6 +54,13 @@ class StatLinesTests(TestCase):
         stat = StatLines((inner1,inner3))
         eq_(18, stat.get_stat())
         rmtree(directory)
+
+    def test_stat_lines_counts_zero_if_directory_does_not_exist(self):
+        directory = mkdtemp("-gb-non-exist-dir-test")
+        inner = path.join(directory, 'nonexistant')
+        stat = StatLines((inner,))
+        eq_(0, stat.get_stat())
+        rmtree(directory)
     
     @nottest
     def _create_file_with_n_lines(self, directory, count, suffix='.java'):
