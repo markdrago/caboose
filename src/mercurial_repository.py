@@ -4,6 +4,8 @@ from datetime import datetime
 
 from repository import Repository
 
+dateformat = '%Y-%m-%d %H:%M:%S'
+
 class MercurialRepository(Repository):
     def __init__(self, directory='.', init=False):
         self.ui = ui.ui()
@@ -15,18 +17,20 @@ class MercurialRepository(Repository):
         commands.update(self.ui, self.repo, rev=rev)
 
     def switch_to_date(self, date):
-        commands.update(self.ui, self.repo, date=date)
+        datestr = self.date_as_string(date)
+        commands.update(self.ui, self.repo, date=datestr)
     
     def get_revision_before_date(self, date):
-        return int(cmdutil.finddate(self.ui, self.repo, "<%s" % date))
+        datestr = self.date_as_string(date)
+        return int(cmdutil.finddate(self.ui, self.repo, "<%s" % datestr))
     
     def switch_to_before_date(self, date):
-        commands.update(self.ui, self.repo, date="<%s" % date)
+        datestr = self.date_as_string(date)
+        commands.update(self.ui, self.repo, date="<%s" % datestr)
 
     def get_date_of_earliest_commit(self):
         chgset = self.repo[0]
-        d = datetime.fromtimestamp(chgset.date()[0])
-        return d.strftime("%Y-%m-%d %H:%M:%S")
+        return datetime.fromtimestamp(chgset.date()[0])
 
     def get_working_directory_parent_revision(self):
         working_directory = self.repo[None]
@@ -39,3 +43,5 @@ class MercurialRepository(Repository):
     def get_repo(self):
         return self.repo
 
+    def date_as_string(self, date):
+        return date.strftime(dateformat)
