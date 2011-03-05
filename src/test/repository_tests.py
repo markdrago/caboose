@@ -24,6 +24,11 @@ class RepositoryTests(TestCase):
     def test_repository_switch_to_revision_throws(self):
         r = Repository()
         r.switch_to_revision(0)
+        
+    @raises(Exception)
+    def test_repository_get_base_directory_throws(self):
+        r = Repository()
+        r.get_base_directory()
     
     def test_get_mercurial_repo_from_factory_for_directory_with_hg_repo(self):
         directory = mkdtemp('-gb-rep-works-test')

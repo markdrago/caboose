@@ -32,6 +32,9 @@ class MercurialRepository(Repository):
         chgset = self.repo[0]
         return datetime.fromtimestamp(chgset.date()[0])
 
+    def get_base_directory(self):
+        return self.repo.root
+
     def get_working_directory_parent_revision(self):
         working_directory = self.repo[None]
         chgset = working_directory.p1()

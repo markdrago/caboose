@@ -1,12 +1,16 @@
 from repository import Repository
 
 class MockDateRepository(Repository):
-    def __init__(self, date_revs):
+    def __init__(self, date_revs, directory='.'):
         self.latest_rev_requested = None
+        self.directory = directory
         self.date_revs = date_revs
         self.dates = self.date_revs.keys()
         self.dates.sort()
     
+    def get_base_directory(self):
+        return self.directory
+
     def get_revision_before_date(self, needle):
         if needle < self.dates[0]:
             raise Exception

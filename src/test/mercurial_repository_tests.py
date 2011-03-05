@@ -59,6 +59,11 @@ class MercurialRepositoryTests(TestCase):
         d = hgrepo.get_date_of_earliest_commit()
         eq_(datetime(2011, 1, 1, 1, 1, 1), d)
 
+    def test_get_base_directory(self):
+        hgrepo = MercurialRepository(self.directory, init=True)
+        d = hgrepo.get_base_directory()
+        eq_(self.directory, d)
+
     @nottest
     def create_test_changesets(self, repo, count=1, dates=[]):
         for i in range(count):
