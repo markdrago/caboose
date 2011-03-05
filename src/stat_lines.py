@@ -1,7 +1,7 @@
 from subprocess import Popen, PIPE
 
 class StatLines(object):
-    def __init__(self, dirs):
+    def set_directories(self, *dirs):
         self.dirs = dirs
 
     def get_stat(self):

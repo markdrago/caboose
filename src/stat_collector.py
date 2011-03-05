@@ -25,11 +25,11 @@ class StatCollector(object):
         ri = RepositoryIterator(self.repo, di)
         
         stat = self.stats[0]
-        stat.set_directories(self.dirs)
+        stat.set_directories(*self.dirs)
         
         results = {}
         for date in ri:
             results[date] = stat.get_stat()
-#            print "%s,%d" % (datetime.strftime(date, '%Y-%m-%d'), results[date])
+            print "%s,%d" % (datetime.strftime(date, '%Y-%m-%d'), results[date])
 
         return results

@@ -58,7 +58,7 @@ class StatCollectorTests(TestCase):
         eq_('/tmp/gb-tests-mock-basedir/somedir', stat.dirs[0])
 
 class SimpleStat(object):
-    def set_directories(self, dirs):
+    def set_directories(self, *dirs):
         self.dirs = dirs
 
     def get_stat(self):
