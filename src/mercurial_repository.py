@@ -22,7 +22,8 @@ class MercurialRepository(Repository):
     
     def get_revision_before_date(self, date):
         datestr = self.date_as_string(date)
-        return int(cmdutil.finddate(self.ui, self.repo, "<%s" % datestr))
+        rev = int(cmdutil.finddate(self.ui, self.repo, "<%s" % datestr))
+        return self.repo[rev].hex()
     
     def switch_to_before_date(self, date):
         datestr = self.date_as_string(date)
@@ -38,7 +39,7 @@ class MercurialRepository(Repository):
     def get_working_directory_parent_revision(self):
         working_directory = self.repo[None]
         chgset = working_directory.p1()
-        return chgset.rev()
+        return chgset.hex()
 
     def get_ui(self):
         return self.ui

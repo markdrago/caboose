@@ -5,7 +5,6 @@ from unittest import TestCase
 import os
 from shutil import rmtree
 from tempfile import mkdtemp
-from uuid import uuid4
 from datetime import datetime
 from mercurial import commands
 
@@ -28,29 +27,30 @@ class MercurialRepositoryTests(TestCase):
 
     def test_switch_to_revision(self):
         hgrepo = MercurialRepository(self.directory, init=True)
-        self.create_test_changesets(hgrepo, 3)
+        dates = ('2011-01-01', '2011-02-02', '2011-03-03')
+        self.create_test_changesets(hgrepo, 3, dates=dates)
         hgrepo.switch_to_revision(1)
-        eq_(1, hgrepo.get_working_directory_parent_revision())
+        eq_('37852bd42d8ae89ea30c2ce2c429459ac83303bd', hgrepo.get_working_directory_parent_revision())
     
     def test_switch_to_date(self):
         hgrepo = MercurialRepository(self.directory, init=True)
         dates = ('2011-01-01', '2011-02-02', '2011-03-03')
         self.create_test_changesets(hgrepo, 3, dates=dates)
         hgrepo.switch_to_date(datetime(2011, 2, 2))
-        eq_(1, hgrepo.get_working_directory_parent_revision())
+        eq_('37852bd42d8ae89ea30c2ce2c429459ac83303bd', hgrepo.get_working_directory_parent_revision())
 
     def test_switch_to_commit_before_date_time(self):
         hgrepo = MercurialRepository(self.directory, init=True)
         dates = ('2011-01-01 01:01:01', '2011-02-02 02:02:02', '2011-03-03 03:03:03')
         self.create_test_changesets(hgrepo, 3, dates=dates)
         hgrepo.switch_to_before_date(datetime(2011, 2, 2, 4, 4, 4))
-        eq_(1, hgrepo.get_working_directory_parent_revision())
+        eq_('9699b017dc594de1d07ebc994e63aeddf31da8b8', hgrepo.get_working_directory_parent_revision())
     
     def test_get_revision_before_date_time(self):
         hgrepo = MercurialRepository(self.directory, init=True)
         dates = ('2011-01-01 01:01:01', '2011-02-02 02:02:02', '2011-03-03 03:03:03')
         self.create_test_changesets(hgrepo, 3, dates=dates)
-        eq_(1, hgrepo.get_revision_before_date(datetime(2011, 2, 2, 4, 4, 4)))
+        eq_('9699b017dc594de1d07ebc994e63aeddf31da8b8', hgrepo.get_revision_before_date(datetime(2011, 2, 2, 4, 4, 4)))
 
     def test_get_date_of_earliest_commit(self):
         hgrepo = MercurialRepository(self.directory, init=True)
@@ -73,13 +73,19 @@ class MercurialRepositoryTests(TestCase):
             date=None
             if i < len(dates):
                 date=dates[i]
-            commands.commit(repo.get_ui(), repo.get_repo(), date=date, message="creating %s" % (filename,))
+            commands.commit(repo.get_ui(), repo.get_repo(), date=date, message="creating test commit", user='Test Runner <trunner@domain.com>')
     
     @nottest        
     def _create_random_file(self):
-        filename = os.path.join(self.directory, str(uuid4()))
-        with open(filename, 'w') as f:
-            f.write(filename)
-            f.close()
-        return filename
+        i = 0
+        while True:
+            filename = "file%d" % i
+            filepath = os.path.join(self.directory, filename)
+            if os.path.exists(filepath):
+                i += 1
+                continue
+            with open(filepath, 'w') as f:
+                f.write(filename)
+                f.close()
+            return filepath
 
