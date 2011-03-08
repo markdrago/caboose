@@ -83,6 +83,16 @@ class FileIteratorTests(TestCase):
         s = set(self.file_iterator.files())
         eq_(set(self._prepend_dir(['file1', 'file2'], dir1full)), s)
 
+    def test_file_iterator_acts_like_iterator(self):
+        files = ['file.txt', 'file.java']
+        need_to_find = [os.path.join(self.directory, f) for f in files]
+        
+        for f in need_to_find:
+            self._create_file(self.directory, f)
+        for f in self.file_iterator:
+            need_to_find.remove(f)
+        eq_(0, len(need_to_find))
+
     @nottest
     def _create_file(self, directory, filename):
         filepath = os.path.join(directory, filename)

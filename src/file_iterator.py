@@ -2,9 +2,9 @@ import os
 from fnmatch import fnmatch
 
 class FileIterator(object):
-    def __init__(self, directories, globtxt=None, basedir=None):
+    def __init__(self, directories, glob=None, basedir=None):
         self.set_directories(directories)
-        self.set_glob(globtxt)
+        self.set_glob(glob)
         self.set_base_directory(basedir)
     
     def set_directories(self, directories):
@@ -16,6 +16,9 @@ class FileIterator(object):
     def set_base_directory(self, basedir):
         self.basedir = basedir
 
+    def __iter__(self):
+        return self.files().__iter__()
+    
     def files(self):
         filelist = []
         for directory in self.directories:
