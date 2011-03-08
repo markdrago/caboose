@@ -19,8 +19,25 @@ class FileIteratorTests(TestCase):
     def test_iterate_files_in_single_directory(self):
         self._create_file(self.directory, 'file1')
         self._create_file(self.directory, 'file2')
-        l = list(self.file_iterator.files())
-        eq_(self._prepend_dir(['file1', 'file2']), l)
+        s = set(self.file_iterator.files())
+        eq_(set(self._prepend_dir(['file1', 'file2'])), s)
+    
+    def test_iterate_files_in_directory_tree(self):
+        self._create_file(self.directory, 'file0')
+        dir1 = self._create_dir(self.directory, 'dir1')
+        self._create_file(dir1, 'file1')
+        dir2 = self._create_dir(dir1, 'dir2')
+        self._create_file(dir2, 'file2')
+        dir3 = self._create_dir(self.directory, 'dir3')
+        self._create_file(dir3, 'file3')
+        
+        expected = set()
+        expected.add(os.path.join(self.directory, 'file0'))
+        expected.add(os.path.join(dir1, 'file1'))
+        expected.add(os.path.join(dir2, 'file2'))
+        expected.add(os.path.join(dir3, 'file3'))
+        s = set(self.file_iterator.files())
+        eq_(expected, s)
 
     @nottest
     def _create_file(self, directory, filename):
