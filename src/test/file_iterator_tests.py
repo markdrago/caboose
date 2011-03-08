@@ -11,7 +11,7 @@ from file_iterator import FileIterator
 class FileIteratorTests(TestCase):
     def setUp(self):
         self.directory = mkdtemp('-gb-file-iterator-tests')
-        self.file_iterator = FileIterator(self.directory)
+        self.file_iterator = FileIterator([self.directory])
 
     def tearDown(self):
         rmtree(self.directory)
