@@ -38,6 +38,13 @@ class FileIteratorTests(TestCase):
         expected.add(os.path.join(dir3, 'file3'))
         s = set(self.file_iterator.files())
         eq_(expected, s)
+    
+    def test_match_files_by_glob(self):
+        self.file_iterator.set_glob("*.java")
+        self._create_file(self.directory, 'file.txt')
+        self._create_file(self.directory, 'file.java')
+        s = set(self.file_iterator.files())
+        eq_(set([os.path.join(self.directory, 'file.java')]), s)
 
     @nottest
     def _create_file(self, directory, filename):
