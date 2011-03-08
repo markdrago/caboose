@@ -63,6 +63,10 @@ class MercurialRepositoryTests(TestCase):
         hgrepo = MercurialRepository(self.directory, init=True)
         d = hgrepo.get_base_directory()
         eq_(self.directory, d)
+    
+    def test_repo_uses_quiet_ui(self):
+        hgrepo = MercurialRepository(self.directory, init=True)
+        eq_(True, hgrepo.ui.quiet)
 
     @nottest
     def create_test_changesets(self, repo, count=1, dates=[]):

@@ -9,6 +9,7 @@ dateformat = '%Y-%m-%d %H:%M:%S'
 class MercurialRepository(Repository):
     def __init__(self, directory='.', init=False):
         self.ui = ui.ui()
+        self.ui.setconfig('ui', 'quiet', True)
         if init and not os.path.isdir(os.path.join(directory, '.hg')):
             commands.init(self.ui, directory)
         self.repo = hg.repository(self.ui, directory)
