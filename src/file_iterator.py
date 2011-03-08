@@ -3,8 +3,11 @@ from fnmatch import fnmatch
 
 class FileIterator(object):
     def __init__(self, directories, globtxt=None):
+        self.set_directories(directories)
+        self.set_glob(globtxt)
+    
+    def set_directories(self, directories):
         self.directories = directories
-        self.glob = globtxt
     
     def set_glob(self, globtxt):
         self.glob = globtxt

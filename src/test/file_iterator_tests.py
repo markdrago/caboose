@@ -62,6 +62,18 @@ class FileIteratorTests(TestCase):
         s = set(self.file_iterator.files())
         eq_(expected, s)
 
+    def test_iterate_files_in_multiple_directories(self):
+        dir1 = self._create_dir(self.directory, 'dir1')
+        dir2 = self._create_dir(self.directory, 'dir2')
+        self._create_file(dir1, 'file1')
+        self._create_file(dir2, 'file2')
+        self.file_iterator.set_directories([dir1, dir2])
+        expected = set()
+        expected.add(os.path.join(dir1, 'file1'))
+        expected.add(os.path.join(dir2, 'file2'))
+        s = set(self.file_iterator.files())
+        eq_(expected, s)
+
     @nottest
     def _create_file(self, directory, filename):
         filepath = os.path.join(directory, filename)
