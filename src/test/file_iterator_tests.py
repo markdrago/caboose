@@ -73,6 +73,15 @@ class FileIteratorTests(TestCase):
         expected.add(os.path.join(dir2, 'file2'))
         s = set(self.file_iterator.files())
         eq_(expected, s)
+    
+    def test_file_iterator_gets_stats_for_dir_relative_to_base_dir(self):
+        dir1full = self._create_dir(self.directory, 'dir1')
+        self._create_file(dir1full, 'file1')
+        self._create_file(dir1full, 'file2')
+        self.file_iterator.set_directories(['dir1'])
+        self.file_iterator.set_base_directory(self.directory)
+        s = set(self.file_iterator.files())
+        eq_(set(self._prepend_dir(['file1', 'file2'], dir1full)), s)
 
     @nottest
     def _create_file(self, directory, filename):
