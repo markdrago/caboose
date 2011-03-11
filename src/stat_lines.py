@@ -1,8 +1,7 @@
-from statistic import Statistic
-from shell_stat import ShellStat
 from summed_stat import SummedStat
 
-class StatLines(Statistic, ShellStat, SummedStat):
-    def get_single_file_cmd(self):
-        return "/usr/bin/wc -l %s | /usr/bin/tail -n 1 | awk '{print $1}'"
+class StatLines(SummedStat):
+    def get_single_file_stat(self, filename):
+        cmd = "/usr/bin/wc -l %s | /usr/bin/tail -n 1 | awk '{print $1}'"
+        return self.get_single_file_stat_from_shell(cmd, filename)
 
