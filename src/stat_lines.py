@@ -1,7 +1,17 @@
-from summed_stat import SummedStat
+from statistic import Statistic
 
-class StatLines(SummedStat):
+class StatLines(Statistic):
+    def get_stat(self):
+        results = [self.get_single_file_stat(f) for f in self.files]
+        return sum(results)
+
     def get_single_file_stat(self, filename):
         cmd = "/usr/bin/wc -l %s | /usr/bin/tail -n 1 | awk '{print $1}'"
-        return self.get_single_file_stat_from_shell(cmd, filename)
+
+        output = self.get_result_from_shell(cmd % (filename,))
+        output = output.split('\n')[0]
+        output = output.strip()
+        if output.isdigit():
+            return int(output)
+        return 0
 
