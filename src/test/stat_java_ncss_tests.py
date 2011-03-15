@@ -41,17 +41,6 @@ class StatLinesTests(TestCase):
         eq_(7, stat.get_stat())
         rmtree(directory)
 
-    def test_only_counts_java_files(self):
-        directory = mkdtemp("-gb-numlines-java-files-test")
-        self._create_file_with_lines(directory, 2, 3, 4, suffix='.notjava')
-        self._create_file_with_lines(directory, 5, 6, 7)
-        file_iterator = FileIterator([directory])
-        file_iterator.set_glob("*.java")
-        stat = StatJavaNcss()
-        stat.set_files(file_iterator.files())
-        eq_(5, stat.get_stat())
-        rmtree(directory)
-    
     def test_proper_number_of_lines_in_multiple_dirs(self):
         directory = mkdtemp("-gb-numlines-multiple-dir-test")
         inner1 = mkdtemp("-inner-dir1", dir=directory)

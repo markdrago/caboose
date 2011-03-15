@@ -1,4 +1,3 @@
-import nose
 from nose.tools import *
 from unittest import TestCase
 
@@ -39,15 +38,18 @@ class FileIteratorTests(TestCase):
         s = set(self.file_iterator.files())
         eq_(expected, s)
     
-    def test_match_files_by_glob(self):
-        self.file_iterator.set_glob("*.java")
+    def test_match_files_by_filematcher(self):
         self._create_file(self.directory, 'file.txt')
         self._create_file(self.directory, 'file.java')
+  
+        fm = MockFileMatcher()
+        fm.add_match("file.java")
+        self.file_iterator.set_filematcher(fm)
+  
         s = set(self.file_iterator.files())
         eq_(set([os.path.join(self.directory, 'file.java')]), s)
 
-    def test_match_files_in_directory_tree_by_glob(self):
-        self.file_iterator.set_glob("*.java")
+    def test_match_files_in_directory_tree_by_filematcher(self):
         self._create_file(self.directory, 'file0.java')
         dir1 = self._create_dir(self.directory, 'dir1')
         self._create_file(dir1, 'file1.c')
@@ -55,6 +57,11 @@ class FileIteratorTests(TestCase):
         self._create_file(dir2, 'file2.java')
         dir3 = self._create_dir(self.directory, 'dir3')
         self._create_file(dir3, 'file3.py')
+
+        fm = MockFileMatcher()
+        fm.add_match("file0.java")
+        fm.add_match("file2.java")
+        self.file_iterator.set_filematcher(fm)
         
         expected = set()
         expected.add(os.path.join(self.directory, 'file0.java'))
@@ -111,4 +118,14 @@ class FileIteratorTests(TestCase):
         if directory is None:
             directory = self.directory
         return [os.path.join(directory, f) for f in files]
+
+class MockFileMatcher(object):
+    def __init__(self):
+        self.matches = []
+    
+    def add_match(self, filename):
+        self.matches.append(filename)
+    
+    def match(self, filename):
+        return (filename in self.matches)
 
