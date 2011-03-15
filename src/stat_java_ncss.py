@@ -1,6 +1,9 @@
 from statistic import Statistic
 
 class StatJavaNcss(Statistic):
+    def get_name(self):
+        return "ncss"
+
     def get_stat(self):
         filestr = ' '.join(self.files)
         cmd = "echo %s | xargs javancss -ncss | sed -e 's/Java NCSS: //'"

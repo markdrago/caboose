@@ -1,6 +1,9 @@
 from statistic import Statistic
 
 class StatJavaMeanCcn(Statistic):
+    def get_name(self):
+        return "meanccn"
+        
     def get_stat(self):
         filestr = ' '.join(self.files)
         cmd = "echo %s | xargs javancss -function | head -n -4 | tail -n +2 | awk '{print $3}'"

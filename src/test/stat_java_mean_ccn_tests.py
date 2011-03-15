@@ -66,6 +66,10 @@ class StatJavaMeanCcnTests(TestCase):
         eq_(0, stat.get_stat())
         rmtree(directory)
     
+    def test_stat_has_right_name(self):
+        stat = StatJavaMeanCcn()
+        eq_(stat.get_name(), "meanccn")
+    
     @nottest
     def _create_file_with_ccn(self, directory, ccn, suffix=".java"):
         filename = path.join(directory, "%s%s" % (str(uuid4()), suffix))

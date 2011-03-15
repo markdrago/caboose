@@ -4,6 +4,9 @@ class StatLines(Statistic):
     def get_stat(self):
         return sum([self.get_single_file_stat(f) for f in self.files])
 
+    def get_name(self):
+        return "lines"
+
     def get_single_file_stat(self, filename):
         cmd = "/usr/bin/wc -l %s | /usr/bin/tail -n 1 | awk '{print $1}'"
 

@@ -86,6 +86,10 @@ class StatLinesTests(TestCase):
         eq_(0, stat.get_stat())
         rmtree(directory)
     
+    def test_stat_has_right_name(self):
+        stat = StatJavaNcss()
+        eq_(stat.get_name(), "ncss")
+    
     @nottest
     def _create_file_with_lines(self, directory, source_lines, non_source_lines, blank_lines, suffix=".java"):
         filename = path.join(directory, "%s%s" % (str(uuid4()), suffix))
