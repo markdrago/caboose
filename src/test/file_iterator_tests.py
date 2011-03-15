@@ -6,11 +6,14 @@ from shutil import rmtree
 from tempfile import mkdtemp
 
 from file_iterator import FileIterator
+from file_package import FilePackage
 
 class FileIteratorTests(TestCase):
     def setUp(self):
         self.directory = mkdtemp('-gb-file-iterator-tests')
-        self.file_iterator = FileIterator([self.directory])
+        self.file_package = FilePackage()
+        self.file_package.add_directory(self.directory)
+        self.file_iterator = FileIterator([self.file_package,])
 
     def tearDown(self):
         rmtree(self.directory)
@@ -44,7 +47,10 @@ class FileIteratorTests(TestCase):
   
         fm = MockFileMatcher()
         fm.add_match("file.java")
-        self.file_iterator.set_filematcher(fm)
+        fp = FilePackage()
+        fp.add_directory(self.directory)
+        fp.add_file_matcher(fm)
+        self.file_iterator.set_filepackages([fp])
   
         s = set(self.file_iterator.files())
         eq_(set([os.path.join(self.directory, 'file.java')]), s)
@@ -61,7 +67,10 @@ class FileIteratorTests(TestCase):
         fm = MockFileMatcher()
         fm.add_match("file0.java")
         fm.add_match("file2.java")
-        self.file_iterator.set_filematcher(fm)
+        fp = FilePackage()
+        fp.add_directory(self.directory)
+        fp.add_file_matcher(fm)
+        self.file_iterator.set_filepackages([fp])
         
         expected = set()
         expected.add(os.path.join(self.directory, 'file0.java'))
@@ -74,7 +83,9 @@ class FileIteratorTests(TestCase):
         dir2 = self._create_dir(self.directory, 'dir2')
         self._create_file(dir1, 'file1')
         self._create_file(dir2, 'file2')
-        self.file_iterator.set_directories([dir1, dir2])
+        fp = FilePackage()
+        fp.add_directories(dir1, dir2)
+        self.file_iterator.set_filepackages([fp])
         expected = set()
         expected.add(os.path.join(dir1, 'file1'))
         expected.add(os.path.join(dir2, 'file2'))
@@ -85,7 +96,9 @@ class FileIteratorTests(TestCase):
         dir1full = self._create_dir(self.directory, 'dir1')
         self._create_file(dir1full, 'file1')
         self._create_file(dir1full, 'file2')
-        self.file_iterator.set_directories(['dir1'])
+        fp = FilePackage()
+        fp.add_directory("dir1")
+        self.file_iterator.set_filepackages([fp])
         self.file_iterator.set_base_directory(self.directory)
         s = set(self.file_iterator.files())
         eq_(set(self._prepend_dir(['file1', 'file2'], dir1full)), s)

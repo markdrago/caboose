@@ -9,12 +9,17 @@ from tempfile import mkdtemp
 
 from stat_lines import StatLines
 from file_iterator import FileIterator
+from file_package import FilePackage
 
 class StatLinesTests(TestCase):
     def test_proper_number_of_lines_are_counted_in_single_file(self):
         directory = mkdtemp("-gb-numlines-single-test")
         self._create_file_with_n_lines(directory, 2)
-        file_iterator = FileIterator([directory])
+
+        fp = FilePackage()
+        fp.add_directory(directory)
+        file_iterator = FileIterator([fp])
+
         stat = StatLines()
         stat.set_files(file_iterator.files())
         eq_(2, stat.get_stat())
@@ -24,7 +29,11 @@ class StatLinesTests(TestCase):
         directory = mkdtemp("-gb-numlines-multiple-test")
         self._create_file_with_n_lines(directory, 2)
         self._create_file_with_n_lines(directory, 3)
-        file_iterator = FileIterator([directory])
+
+        fp = FilePackage()
+        fp.add_directory(directory)
+        file_iterator = FileIterator([fp])
+
         stat = StatLines()
         stat.set_files(file_iterator.files())
         eq_(5, stat.get_stat())
@@ -35,7 +44,11 @@ class StatLinesTests(TestCase):
         inner = mkdtemp("-inner-dir", dir=directory)
         self._create_file_with_n_lines(directory, 2)
         self._create_file_with_n_lines(inner, 5)
-        file_iterator = FileIterator([directory])
+
+        fp = FilePackage()
+        fp.add_directory(directory)
+        file_iterator = FileIterator([fp])
+
         stat = StatLines()
         stat.set_files(file_iterator.files())
         eq_(7, stat.get_stat())
@@ -50,7 +63,11 @@ class StatLinesTests(TestCase):
         self._create_file_with_n_lines(inner1, 5)
         self._create_file_with_n_lines(inner2, 8)
         self._create_file_with_n_lines(inner3, 13)
-        file_iterator = FileIterator([inner1, inner3])
+
+        fp = FilePackage()
+        fp.add_directories(inner1, inner3)
+        file_iterator = FileIterator([fp])
+
         stat = StatLines()
         stat.set_files(file_iterator.files())
         eq_(18, stat.get_stat())
@@ -59,7 +76,11 @@ class StatLinesTests(TestCase):
     def test_stat_lines_counts_zero_if_directory_does_not_exist(self):
         directory = mkdtemp("-gb-non-exist-dir-test")
         inner = path.join(directory, 'nonexistant')
-        file_iterator = FileIterator([inner])
+
+        fp = FilePackage()
+        fp.add_directory(inner)
+        file_iterator = FileIterator([fp])
+
         stat = StatLines()
         stat.set_files(file_iterator.files())
         eq_(0, stat.get_stat())
