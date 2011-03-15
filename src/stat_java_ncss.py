@@ -5,7 +5,6 @@ class StatJavaNcss(Statistic):
         filestr = ' '.join(self.files)
         cmd = "echo %s | xargs javancss -ncss | sed -e 's/Java NCSS: //'"
         cmd = cmd % (filestr,)
-        print cmd
         output = self.get_result_from_shell(cmd)
 
         #xargs could run javancss more than once so we need to

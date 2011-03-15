@@ -27,7 +27,7 @@ class StatCollector(object):
         results = {}
         for date in ri:
             results[date] = stat.get_stat()
-            print "%s,%d" % (datetime.strftime(date, '%Y-%m-%d'), results[date])
+            print "%s,%.2f" % (datetime.strftime(date, '%Y-%m-%d'), results[date])
 
         return results
 

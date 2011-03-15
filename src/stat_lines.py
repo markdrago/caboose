@@ -2,8 +2,7 @@ from statistic import Statistic
 
 class StatLines(Statistic):
     def get_stat(self):
-        results = [self.get_single_file_stat(f) for f in self.files]
-        return sum(results)
+        return sum([self.get_single_file_stat(f) for f in self.files])
 
     def get_single_file_stat(self, filename):
         cmd = "/usr/bin/wc -l %s | /usr/bin/tail -n 1 | awk '{print $1}'"
