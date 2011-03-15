@@ -1,7 +1,13 @@
+from os import path
+
 class FilePackage(object):
     def __init__(self):
         self.directories = []
         self.file_matchers = []
+        self.basedir = None
+    
+    def set_basedir(self, basedir):
+        self.basedir = basedir
     
     def add_directory(self, directory):
         self.directories.append(directory)
@@ -11,6 +17,8 @@ class FilePackage(object):
             self.add_directory(directory)
     
     def get_directories(self):
+        if self.basedir:
+            return [path.join(self.basedir, d) for d in self.directories]
         return self.directories
 
     def add_file_matcher(self, filematcher):

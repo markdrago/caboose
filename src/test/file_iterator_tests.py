@@ -98,8 +98,8 @@ class FileIteratorTests(TestCase):
         self._create_file(dir1full, 'file2')
         fp = FilePackage()
         fp.add_directory("dir1")
+        fp.set_basedir(self.directory)
         self.file_iterator.set_filepackages([fp])
-        self.file_iterator.set_base_directory(self.directory)
         s = set(self.file_iterator.files())
         eq_(set(self._prepend_dir(['file1', 'file2'], dir1full)), s)
 

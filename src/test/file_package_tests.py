@@ -32,6 +32,13 @@ class FilePackageTests(TestCase):
         fp.add_file_matchers(fm1, fm2)
         eq_(set((fm1, fm2)), set(fp.get_file_matchers()))
 
+    def test_file_package_prepends_basedir(self):
+        fp = FilePackage()
+        fp.set_basedir("/tmp/basedirname")
+        fp.add_directories("dir1", "dir2")
+        expected = set(("/tmp/basedirname/dir1", "/tmp/basedirname/dir2"))
+        eq_(expected, set(fp.get_directories()))
+
 class MockFileMatcher(object):
     def match(self):
         return True
