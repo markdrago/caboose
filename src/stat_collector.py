@@ -21,13 +21,25 @@ class StatCollector(object):
         di = DateIterator(self.start, self.end, self.timedelta)
         ri = RepositoryIterator(self.repo, di)
         
-        stat = self.stats[0]
-        stat.set_files(self.files)
-        
         results = {}
         for date in ri:
-            results[date] = stat.get_stat()
-            print "%s,%.2f" % (datetime.strftime(date, '%Y-%m-%d'), results[date])
+
+            stat_results = {}
+            for stat in self.stats:
+                stat.set_files(self.files)
+                stat_results[stat.get_name()] = stat.get_stat()
+
+            self.print_one_day_results(date, stat_results)
+            results[date] = stat_results
 
         return results
+
+    def print_one_day_results(self, date, results):
+        result_string = ""
+        sep = ""
+        for result in results.values():
+            result_string += sep + "%.2f" % result
+            sep = ","
+
+        print "%s,%s" % (datetime.strftime(date, '%Y-%m-%d'), result_string)
 
