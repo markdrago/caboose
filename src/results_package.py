@@ -29,10 +29,10 @@ class ResultsPackage(object):
 
     def _get_results_with_javascript_dates(self):
         #convert datetime keys in to javascript time (ms since epoch)
-        json_results = {}
+        js_results = {}
         for date in self.results.keys():
             unixtime = date.strftime("%s")
-            jsontime = int(unixtime) * 1000
-            json_results[jsontime] = self.results[date]
-        return json_results
+            js_time = int(unixtime) * 1000
+            js_results[js_time] = self.results[date]
+        return js_results
 
