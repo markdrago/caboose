@@ -45,3 +45,9 @@ class ResultsPackageTests(TestCase):
         self.rp.add_result(dt2, "simplestat2", 2345)
         eq_(2, self.rp.get_date_count())
 
+    def test_resyult_package_simple_json_output(self):
+        dt = datetime(2011, 03, 18, 19, 10, 0)
+        self.rp.add_result(dt, "simplestat", 1234)
+        expected='{"1300489800000": {"simplestat": 1234}}'
+        eq_(expected, self.rp.get_json())
+
