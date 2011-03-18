@@ -3,6 +3,7 @@ from datetime import datetime
 
 from date_iterator import DateIterator
 from repository_iterator import RepositoryIterator
+from results_package import ResultsPackage
 
 class StatCollector(object):
     def __init__(self, repo, delta, files, stats, start=None,
@@ -21,16 +22,15 @@ class StatCollector(object):
         di = DateIterator(self.start, self.end, self.timedelta)
         ri = RepositoryIterator(self.repo, di)
         
-        results = {}
+        results = ResultsPackage()
         for date in ri:
 
-            stat_results = {}
             for stat in self.stats:
                 stat.set_files(self.files)
-                stat_results[stat.get_name()] = stat.get_stat()
+                stat_result = stat.get_stat()
+                results.add_result(date, stat.get_name(), stat_result)
 
-            self.print_one_day_results(date, stat_results)
-            results[date] = stat_results
+#            self.print_one_day_results(date, stat_results)
 
         return results
 
