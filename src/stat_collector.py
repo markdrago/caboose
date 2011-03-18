@@ -37,8 +37,8 @@ class StatCollector(object):
     def print_one_day_results(self, date, results):
         result_string = ""
         sep = ""
-        for result in results.values():
-            result_string += sep + "%.2f" % result
+        for name, result in results.items():
+            result_string += sep + "%s->%.2f" % (name, result)
             sep = ","
 
         print "%s,%s" % (datetime.strftime(date, '%Y-%m-%d'), result_string)
