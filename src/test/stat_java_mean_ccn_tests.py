@@ -4,17 +4,20 @@ from unittest import TestCase
 
 from os import path
 from shutil import rmtree
-from uuid import uuid4
 from tempfile import mkdtemp
 
 from stat_java_mean_ccn import StatJavaMeanCcn
 from file_iterator import FileIterator
 from file_package import FilePackage
+from ccn_file_creator import CcnFileCreator
 
 class StatJavaMeanCcnTests(TestCase):
+    def setUp(self):
+        self.ccn_file_creator = CcnFileCreator()
+
     def test_proper_ccn_is_found_in_single_file(self):
         directory = mkdtemp("-gb-java-ccn-single-test")
-        self._create_file_with_ccn(directory, 3)
+        self.ccn_file_creator.create_file_with_ccn(3, directory)
 
         fp = FilePackage()
         fp.add_directory(directory)
@@ -27,8 +30,8 @@ class StatJavaMeanCcnTests(TestCase):
 
     def test_proper_ccn_is_found_in_multiple_files(self):
         directory = mkdtemp("-gb-java-ccn-multiple-test")
-        self._create_file_with_ccn(directory, 2)
-        self._create_file_with_ccn(directory, 8)
+        self.ccn_file_creator.create_file_with_ccn(2, directory)
+        self.ccn_file_creator.create_file_with_ccn(8, directory)
 
         fp = FilePackage()
         fp.add_directory(directory)
@@ -41,8 +44,8 @@ class StatJavaMeanCcnTests(TestCase):
 
     def test_proper_ccn_is_found_in_multiple_files_float(self):
         directory = mkdtemp("-gb-java-ccn-multiple-float-test")
-        self._create_file_with_ccn(directory, 3)
-        self._create_file_with_ccn(directory, 8)
+        self.ccn_file_creator.create_file_with_ccn(3, directory)
+        self.ccn_file_creator.create_file_with_ccn(8, directory)
 
         fp = FilePackage()
         fp.add_directory(directory)
@@ -70,18 +73,5 @@ class StatJavaMeanCcnTests(TestCase):
         stat = StatJavaMeanCcn()
         eq_(stat.get_name(), "meanccn")
     
-    @nottest
-    def _create_file_with_ccn(self, directory, ccn, suffix=".java"):
-        filename = path.join(directory, "%s%s" % (str(uuid4()), suffix))
 
-        with open(filename, "w") as f:
-            f.write("public class testClass {\n\n")
-            f.write("  public void testFunc() {\n")
-            f.write("    int x = 1;\n\n")
-            for i in range(ccn - 1):
-                line = "    if (x == %d) { System.out.println(\"x is %d\"); }\n\n"
-                f.write(line % (i, i))
-            f.write("  }\n")
-            f.write("}\n")
-            f.close()
 
