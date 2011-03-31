@@ -22,13 +22,14 @@ class CcnFileCreator(object):
             for i in range(ccn - 1):
                 output += if_line % (i, i)
             output += func_end
+            func_count += 1
         output += class_end
         return output
 
     def create_file_with_ccn(self, ccn, directory, filename=None, suffix=".java"):
         self.create_file_with_funcs_with_ccns(directory, [ccn], filename, suffix)
 
-    def create_file_with_funcs_with_ccns(self, directory, ccns, filename=None, suffix="*.java"):
+    def create_file_with_funcs_with_ccns(self, directory, ccns, filename=None, suffix=".java"):
         fullpath = self._get_filename(directory, filename, suffix)
         
         with open(fullpath, "w") as f:
