@@ -50,4 +50,12 @@ class ResultsPackageTests(TestCase):
         self.rp.add_result(dt, "simplestat", 1234)
         expected='{\n  "1300489800000": {\n    "simplestat": 1234\n  }\n}'
         eq_(expected, self.rp.get_json())
+    
+    def test_result_package_gives_list_of_dates(self):
+        dt1 = datetime(2011, 04, 1, 19, 34, 0)
+        self.rp.add_result(dt1, "simplestat", 1234)
+        dt2 = datetime(2011, 04, 1, 19, 35, 0)
+        self.rp.add_result(dt2, "simplestat", 2345)
+
+        eq_(set(self.rp.get_dates()), set([dt1, dt2]))
 

@@ -27,6 +27,9 @@ class ResultsPackage(object):
         json_results = self._get_results_with_javascript_dates()
         return json.dumps(json_results, indent=2)
 
+    def get_dates(self):
+        return self.results.keys()
+
     def _get_results_with_javascript_dates(self):
         #convert datetime keys in to javascript time (ms since epoch)
         js_results = {}
