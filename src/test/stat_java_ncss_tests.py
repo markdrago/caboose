@@ -86,6 +86,26 @@ class StatLinesTests(TestCase):
         eq_(0, stat.get_stat())
         rmtree(directory)
     
+    #this test used to cause an OSError: Argument list too long
+    def test_stat_lines_works_with_absurd_number_of_files(self):
+        directory = mkdtemp("-gb-absurd-file-count-test")
+        self._create_file_with_lines(directory, 5, 6, 7)
+
+        fp = FilePackage()
+        fp.add_directory(directory)
+        file_iterator = FileIterator([fp])
+
+        files = file_iterator.files()
+
+        #count the same file 5000 times
+        files = files * 5000
+
+        stat = StatJavaNcss()
+        stat._set_ncss_command("bash -c 'for x in `seq $#`; do echo 5; done' filler")
+        stat.set_files(files)
+        eq_(25000, stat.get_stat())
+        rmtree(directory)
+    
     def test_stat_has_right_name(self):
         stat = StatJavaNcss()
         eq_(stat.get_name(), "ncss")

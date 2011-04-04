@@ -1,11 +1,17 @@
 from statistic import Statistic
+import os
 
 class AbstractJavaCcnStat(Statistic):
     def get_ccn_list(self):
-        filestr = ' '.join(self.files)
-        cmd = "echo %s | xargs javancss -function | head -n -4 | tail -n +2 | awk '{print $3}'"
-        cmd = cmd % (filestr,)
+        filename = self.write_filenames_to_temp_file()
+        
+        cmd = "xargs -r -a %s javancss -function | head -n -4 | tail -n +2 | awk '{print $3}'"
+        cmd = cmd % (filename,)
+
         output = self.get_result_from_shell(cmd)
+        
+        os.remove(filename)
+        
         output = output.strip()
         if output == "":
             return []

@@ -1,4 +1,5 @@
 from subprocess import Popen, PIPE
+from tempfile import NamedTemporaryFile
 
 class Statistic(object):
     def set_files(self, files):
@@ -9,4 +10,13 @@ class Statistic(object):
         p.wait()
         output = p.stdout.read()
         return output
+
+    def write_filenames_to_temp_file(self):
+        filestr = "\n".join(self.files)
+
+        f = NamedTemporaryFile(mode='w', delete=False)
+        f.write(filestr)
+        f.close()
+        
+        return f.name
 
