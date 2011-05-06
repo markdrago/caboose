@@ -2,8 +2,6 @@ import os
 from mercurial import hg, ui, commands, cmdutil
 from datetime import datetime
 
-from repository import Repository
-
 dateformat = '%Y-%m-%d %H:%M:%S'
 
 #A repository must implement the following functions:

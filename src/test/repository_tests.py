@@ -5,7 +5,6 @@ from unittest import TestCase
 from shutil import rmtree
 from tempfile import mkdtemp
 
-from repository import Repository
 from repository_factory import RepositoryFactory
 from mercurial_repository import MercurialRepository
 

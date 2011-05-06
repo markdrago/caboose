@@ -1,6 +1,4 @@
-from repository import Repository
-
-class MockDateRepository(Repository):
+class MockDateRepository(object):
     def __init__(self, date_revs, directory='.'):
         self.latest_rev_requested = None
         self.directory = directory

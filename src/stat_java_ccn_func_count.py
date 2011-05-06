@@ -1,7 +1,7 @@
 from abstract_java_ccn_stat import AbstractJavaCcnStat
 
 class StatJavaCcnFuncCount(AbstractJavaCcnStat):
-    def __init__(self, ccn_limit):
+    def set_ccn_limit(self, ccn_limit):
         self.ccn_limit = ccn_limit
 
     def get_name(self):

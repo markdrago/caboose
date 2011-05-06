@@ -21,7 +21,8 @@ class StatJavaMeanCcnTests(TestCase):
         fp.add_directory(directory)
         file_iterator = FileIterator([fp])
         
-        stat = StatJavaCcnFuncCount(2)
+        stat = StatJavaCcnFuncCount()
+        stat.set_ccn_limit(2)
         stat.set_files(file_iterator.files())
         eq_(0, stat.get_stat())
         rmtree(directory)
@@ -34,7 +35,8 @@ class StatJavaMeanCcnTests(TestCase):
         fp.add_directory(directory)
         file_iterator = FileIterator([fp])
         
-        stat = StatJavaCcnFuncCount(2)
+        stat = StatJavaCcnFuncCount()
+        stat.set_ccn_limit(2)
         stat.set_files(file_iterator.files())
         eq_(1, stat.get_stat())
         rmtree(directory)
@@ -47,7 +49,8 @@ class StatJavaMeanCcnTests(TestCase):
         fp.add_directory(directory)
         file_iterator = FileIterator([fp])
         
-        stat = StatJavaCcnFuncCount(3)
+        stat = StatJavaCcnFuncCount()
+        stat.set_ccn_limit(3)
         stat.set_files(file_iterator.files())
         eq_(2, stat.get_stat())
         rmtree(directory)
