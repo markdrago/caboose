@@ -15,7 +15,7 @@ class StatFactoryTests(TestCase):
 
     @raises(StatDoesNotExistException)
     def test_throws_stat_not_found_for_bogus_statname(self):
-        stat = self.sf.get_stat("non_existant_stat")
+        stat = self.sf.get_stat("non_existent_stat")
 
     def test_create_java_ncss(self):
         stat = self.sf.get_stat("java_ncss")
