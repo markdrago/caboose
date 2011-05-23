@@ -39,6 +39,14 @@ class StatCollectorFactoryTests(TestCase):
         sc = self.scf.get_stat_collector(self.conf)
         eq_(directory, self.mock_repo_factory.get_last_directory())
 
+    def test_stat_collector_creates_file_package(self):
+        basedir = "/home/mdrago/repository_lives_here"
+        subdir = "TestProject"
+        self.conf.update({ "repodir": basedir })
+        self.conf.update({ "dirs" : [ subdir ] })
+        fp = self.scf.create_file_package_from_config(self.conf)
+        eq_(set(fp.get_directories()), set([basedir + '/' + subdir]))
+
 class MockRepositoryFactory(object):
     def __init__(self):
         self.last_directory = None
