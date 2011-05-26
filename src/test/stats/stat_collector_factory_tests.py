@@ -1,6 +1,8 @@
 from nose.tools import *
 from unittest import TestCase
 
+from datetime import datetime
+
 from stats.stat_collector_factory import StatCollectorFactory
 from stats.stat_collector_factory import StatConfigurationInvalidException
 
@@ -57,6 +59,13 @@ class StatCollectorFactoryTests(TestCase):
         fp = self.scf.create_file_package_from_config(self.conf)
         eq_(1, len(fp.file_matchers))
         eq_(glob, fp.file_matchers[0].glob)
+
+    def test_stat_collector_factory_creates_start(self):
+        current = datetime(2011, 5, 26, 7, 15, 0)
+        self.scf.set_current_time(current)
+        self.conf.update({"start_time_delta": 7776000})
+        start_time = self.scf.get_start_time_from_config(self.conf)
+        eq_(datetime(2011, 2, 25, 7, 15, 0), start_time)
 
 class MockRepositoryFactory(object):
     def __init__(self):
