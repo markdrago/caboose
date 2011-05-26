@@ -1,7 +1,7 @@
 from os import path
 from datetime import datetime
 
-from date_iterator import DateIterator
+from repo.date_iterator import DateIterator
 from repo.repository_iterator import RepositoryIterator
 from results.results_package import ResultsPackage
 
