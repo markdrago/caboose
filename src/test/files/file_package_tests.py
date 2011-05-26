@@ -5,7 +5,7 @@ import os
 from shutil import rmtree
 from tempfile import mkdtemp
 
-from file_package import FilePackage
+from files.file_package import FilePackage
 
 class FilePackageTests(TestCase):
     def test_file_package_holds_directories(self):

@@ -5,8 +5,8 @@ from shutil import rmtree
 from tempfile import mkdtemp
 
 from stats.stat_java_ccn_func_count import StatJavaCcnFuncCount
-from file_iterator import FileIterator
-from file_package import FilePackage
+from files.file_iterator import FileIterator
+from files.file_package import FilePackage
 from ccn_file_creator import CcnFileCreator
 
 class StatJavaMeanCcnTests(TestCase):
