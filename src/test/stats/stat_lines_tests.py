@@ -7,7 +7,7 @@ from shutil import rmtree
 from uuid import uuid4
 from tempfile import mkdtemp
 
-from stat_lines import StatLines
+from stats.stat_lines import StatLines
 from file_iterator import FileIterator
 from file_package import FilePackage
 

@@ -1,13 +1,13 @@
 from nose.tools import *
 from unittest import TestCase
 
-from stat_factory import StatFactory
-from stat_factory import StatDoesNotExistException
+from stats.stat_factory import StatFactory
+from stats.stat_factory import StatDoesNotExistException
 
-from stat_java_ncss import StatJavaNcss
-from stat_lines import StatLines
-from stat_java_mean_ccn import StatJavaMeanCcn
-from stat_java_ccn_func_count import StatJavaCcnFuncCount
+from stats.stat_java_ncss import StatJavaNcss
+from stats.stat_lines import StatLines
+from stats.stat_java_mean_ccn import StatJavaMeanCcn
+from stats.stat_java_ccn_func_count import StatJavaCcnFuncCount
 
 class StatFactoryTests(TestCase):
     def setUp(self):
