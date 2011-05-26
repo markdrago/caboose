@@ -6,9 +6,9 @@ from os import path
 from shutil import rmtree
 from tempfile import mkdtemp
 
-from stat_java_mean_ccn import StatJavaMeanCcn
-from file_iterator import FileIterator
-from file_package import FilePackage
+from stats.stat_java_mean_ccn import StatJavaMeanCcn
+from files.file_iterator import FileIterator
+from files.file_package import FilePackage
 from ccn_file_creator import CcnFileCreator
 
 class StatJavaMeanCcnTests(TestCase):

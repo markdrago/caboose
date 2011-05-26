@@ -7,9 +7,9 @@ from shutil import rmtree
 from uuid import uuid4
 from tempfile import mkdtemp
 
-from stat_java_ncss import StatJavaNcss
-from file_iterator import FileIterator
-from file_package import FilePackage
+from stats.stat_java_ncss import StatJavaNcss
+from files.file_iterator import FileIterator
+from files.file_package import FilePackage
 
 class StatLinesTests(TestCase):
     def test_proper_number_of_lines_are_counted_in_single_file(self):

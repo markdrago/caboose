@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from datetime import datetime, timedelta
 
-from date_iterator import DateIterator
+from repo.date_iterator import DateIterator
 
 class DateIteratorTests(TestCase):
     def test_date_iterator_returns_self_on_iter(self):

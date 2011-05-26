@@ -1,7 +1,7 @@
 from nose.tools import *
 from unittest import TestCase
 
-from config_parser import ConfigParser
+from config.config_parser import ConfigParser
 
 class ConfigParserTests(TestCase):
     def setUp(self):

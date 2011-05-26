@@ -5,7 +5,7 @@ import os
 from shutil import rmtree
 from tempfile import mkdtemp
 
-from file_matcher_glob import FileMatcherGlob
+from files.file_matcher_glob import FileMatcherGlob
 
 class FileMatcherGlobTests(TestCase):
     def setUp(self):

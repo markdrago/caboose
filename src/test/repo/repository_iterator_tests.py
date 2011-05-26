@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from datetime import datetime
 
-from repository_iterator import RepositoryIterator
+from repo.repository_iterator import RepositoryIterator
 from mock_date_repository import MockDateRepository
 
 class RepositoryIteratorTests(TestCase):

@@ -1,7 +1,7 @@
 from stat_factory import StatFactory
-from repository_factory import RepositoryFactory
-from file_package import FilePackage
-from file_iterator import FileIterator
+from repo.repository_factory import RepositoryFactory
+from files.file_package import FilePackage
+from files.file_iterator import FileIterator
 
 class StatCollectorFactory(object):
     def __init__(self):

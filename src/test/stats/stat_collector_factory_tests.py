@@ -1,8 +1,8 @@
 from nose.tools import *
 from unittest import TestCase
 
-from stat_collector_factory import StatCollectorFactory
-from stat_collector_factory import StatConfigurationInvalidException
+from stats.stat_collector_factory import StatCollectorFactory
+from stats.stat_collector_factory import StatConfigurationInvalidException
 
 class StatCollectorFactoryTests(TestCase):
     def setUp(self):

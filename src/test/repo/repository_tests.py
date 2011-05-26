@@ -5,8 +5,8 @@ from unittest import TestCase
 from shutil import rmtree
 from tempfile import mkdtemp
 
-from repository_factory import RepositoryFactory
-from mercurial_repository import MercurialRepository
+from repo.repository_factory import RepositoryFactory
+from repo.mercurial_repository import MercurialRepository
 
 class RepositoryTests(TestCase):
     @raises(Exception)

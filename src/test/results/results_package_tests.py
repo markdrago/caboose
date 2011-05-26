@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from datetime import datetime
 
-from results_package import ResultsPackage
+from results.results_package import ResultsPackage
 
 class ResultsPackageTests(TestCase):
     def setUp(self):
