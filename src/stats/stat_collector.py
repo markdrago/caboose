@@ -3,7 +3,7 @@ from datetime import datetime
 
 from date_iterator import DateIterator
 from repo.repository_iterator import RepositoryIterator
-from results_package import ResultsPackage
+from results.results_package import ResultsPackage
 
 class StatCollector(object):
     def __init__(self, repo, delta, files, stats, start=None,

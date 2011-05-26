@@ -3,8 +3,8 @@ from unittest import TestCase
 
 from datetime import datetime
 
-from results_package import ResultsPackage
-from results_package_ratio_combiner import ResultsPackageRatioCombiner
+from results.results_package import ResultsPackage
+from results.results_package_ratio_combiner import ResultsPackageRatioCombiner
 
 class ResultsPackageTests(TestCase):
     def test_combine_simple_results_packages(self):
