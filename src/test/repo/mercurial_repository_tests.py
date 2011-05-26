@@ -8,7 +8,7 @@ from tempfile import mkdtemp
 from datetime import datetime
 from mercurial import commands
 
-from mercurial_repository import MercurialRepository
+from repo.mercurial_repository import MercurialRepository
 
 class MercurialRepositoryTests(TestCase):
     def setUp(self):

@@ -1,5 +1,5 @@
 from stat_factory import StatFactory
-from repository_factory import RepositoryFactory
+from repo.repository_factory import RepositoryFactory
 from file_package import FilePackage
 from file_iterator import FileIterator
 

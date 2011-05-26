@@ -7,7 +7,7 @@ from tempfile import mkdtemp
 from mercurial import commands
 from datetime import datetime, timedelta
 
-from test.mock_date_repository import MockDateRepository
+from test.repo.mock_date_repository import MockDateRepository
 from stats.stat_collector import StatCollector    
 
 class StatCollectorTests(TestCase):

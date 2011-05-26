@@ -2,7 +2,7 @@ from os import path
 from datetime import datetime
 
 from date_iterator import DateIterator
-from repository_iterator import RepositoryIterator
+from repo.repository_iterator import RepositoryIterator
 from results_package import ResultsPackage
 
 class StatCollector(object):
