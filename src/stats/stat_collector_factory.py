@@ -2,6 +2,7 @@ from stat_factory import StatFactory
 from repo.repository_factory import RepositoryFactory
 from files.file_package import FilePackage
 from files.file_iterator import FileIterator
+from files.file_matcher_glob import FileMatcherGlob
 
 class StatCollectorFactory(object):
     def __init__(self):
@@ -14,7 +15,7 @@ class StatCollectorFactory(object):
             repo = self.repo_factory.get_repository(conf['repodir'])
             files = self.create_file_iterator_from_config(conf)
         except KeyError:
-            raise StatConfigurationInvalidException("Unable to find statname configuration option")
+            raise StatConfigurationInvalidException("Unable to find required configuration option")
 
     def create_file_iterator_from_config(self, conf):
         return FileIterator(self.create_file_package_from_config)
@@ -23,6 +24,11 @@ class StatCollectorFactory(object):
         fp = FilePackage()
         fp.set_basedir(conf['repodir'])
         fp.add_directories(*conf['dirs'])
+
+        if 'glob' in conf:
+            fm = FileMatcherGlob(conf['glob'])
+            fp.add_file_matcher(fm)
+
         return fp
 
     def set_stat_factory(self, sf):
