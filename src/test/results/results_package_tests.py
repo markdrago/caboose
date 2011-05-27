@@ -1,7 +1,10 @@
 from nose.tools import *
 from unittest import TestCase
 
+from shutil import rmtree
+from tempfile import mkdtemp
 from datetime import datetime
+from os import path
 
 from results.results_package import ResultsPackage
 
@@ -58,4 +61,20 @@ class ResultsPackageTests(TestCase):
         self.rp.add_result(dt2, "simplestat", 2345)
 
         eq_(set(self.rp.get_dates()), set([dt1, dt2]))
+
+    def test_result_package_writes_json_to_outfile(self):
+        directory = mkdtemp('-gb-results-package-tests')
+        filename = path.join(directory, 'outfile')
+        self.rp.set_outfile(filename)
+        
+        dt = datetime(2011, 03, 18, 19, 10, 0)
+        self.rp.add_result(dt, "simplestat", 1234)
+        self.rp.write_json_results()
+
+        with file(filename, "r") as f:
+            written = f.read()
+
+        expected='{\n  "1300489800000": {\n    "simplestat": 1234\n  }\n}'
+        eq_(expected, written)
+        rmtree(directory)
 

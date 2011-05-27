@@ -5,6 +5,7 @@ from repo.repository_factory import RepositoryFactory
 from files.file_package import FilePackage
 from files.file_iterator import FileIterator
 from files.file_matcher_glob import FileMatcherGlob
+from results.results_package import ResultsPackage
 
 class StatCollectorFactory(object):
     def __init__(self):
@@ -19,6 +20,7 @@ class StatCollectorFactory(object):
             files = self.create_file_iterator_from_config(conf)
             start_time = self.get_start_time_from_config(conf)
             sample_interval = self.get_sample_time_interval_from_config(conf)
+            rp = self.get_results_package_from_config(conf)
         except KeyError:
             raise StatConfigurationInvalidException("Unable to find required configuration option")
 
@@ -50,6 +52,11 @@ class StatCollectorFactory(object):
 
     def get_sample_time_interval_from_config(self, conf):
         return timedelta(seconds = conf['sample_time_interval'])
+
+    def get_results_package_from_config(self, conf):
+        rp = ResultsPackage()
+        rp.set_outfile(conf['outfile'])
+        return rp
 
     def set_current_time(self, dt):
         self.current_time = dt

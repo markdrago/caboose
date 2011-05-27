@@ -27,6 +27,28 @@ class GettingBetterTests(TestCase):
         ok_(stat1conf in self.stat_collector_factory.confs)
         ok_(stat2conf in self.stat_collector_factory.confs)
 
+#    def write_results_from_stat_collectors(self):
+#        sc1 = MockStatCollector()
+#        sc2 = MockStatCollector()
+#        outfile = '/tmp/not-really-used'
+#        self.gb.write_results_from_stat_collectors([sc1, sc2], outfile)
+
+class MockResultsPackage(object):
+    def __init__(self):
+        self.outfile_requested = None
+    
+    def write_json_results(self, outfile):
+        self.outfile_requested = outfile
+
+class MockStatCollector(object):
+    def __init__(self):
+        self.was_called = False
+        self.results_package = MockResultsPackage()
+        
+    def get_stats(self):
+        self.was_called = True
+        return self.results_package
+
 class MockStatCollectorFactory(object):
     def __init__(self):
         self.confs = []

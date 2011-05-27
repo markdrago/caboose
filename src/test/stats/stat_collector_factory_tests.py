@@ -16,10 +16,6 @@ class StatCollectorFactoryTests(TestCase):
         self.mock_repo_factory = MockRepositoryFactory()
         self.scf.set_repo_factory(self.mock_repo_factory)
 
-        self.conf = {}
-        for key in ("statname", "repodir", "start_time_delta", "sample_time_interval"):
-            self.conf[key] = "DEADBEEF"
-
     def test_stat_collector_factory_raises_exception_for_invalid_config_with_msg(self):
         didthrow = False
         try:
@@ -31,48 +27,56 @@ class StatCollectorFactoryTests(TestCase):
 
     def test_stat_collector_factory_creates_proper_stat(self):
         statname = "my_favorite_stat"
-        self.conf.update({ "statname": statname })
-        stat = self.scf.create_stat_from_config(self.conf)
+        conf = { "statname": statname }
+        stat = self.scf.create_stat_from_config(conf)
         eq_(statname, self.mock_stat_factory.get_last_stat_created())
 
     def test_stat_collector_factory_creates_proper_repo(self):
         directory = "/home/mdrago/repository_lives_here"
-        self.conf.update({ "repodir": directory })
-        repo = self.scf.create_repo_from_config(self.conf)
+        conf = { "repodir": directory }
+        repo = self.scf.create_repo_from_config(conf)
         eq_(directory, self.mock_repo_factory.get_last_directory())
 
     def test_stat_collector_factory_creates_file_package(self):
         basedir = "/home/mdrago/repository_lives_here"
         subdir = "TestProject"
-        self.conf.update({ "repodir": basedir })
-        self.conf.update({ "dirs" : [ subdir ] })
-        fp = self.scf.create_file_package_from_config(self.conf)
+        conf = {}
+        conf["repodir"] = basedir
+        conf["dirs"] = [ subdir ]
+        fp = self.scf.create_file_package_from_config(conf)
         eq_(set([basedir + '/' + subdir]), set(fp.get_directories()))
 
     def test_stat_collector_factory_creates_matcher_glob(self):
         glob = "*.java"
         basedir = "/home/mdrago/repository_lives_here"
         subdir = "TestProject"
-        self.conf.update({ "glob": glob })
-        self.conf.update({ "repodir": basedir })
-        self.conf.update({ "dirs" : [ subdir ] })
-        fp = self.scf.create_file_package_from_config(self.conf)
+        conf = {}
+        conf["glob"] = glob
+        conf["repodir"] = basedir
+        conf["dirs"] = [ subdir ]
+        fp = self.scf.create_file_package_from_config(conf)
         eq_(1, len(fp.file_matchers))
         eq_(glob, fp.file_matchers[0].glob)
 
     def test_stat_collector_factory_creates_start_time(self):
         current = datetime(2011, 5, 26, 7, 15, 0)
         self.scf.set_current_time(current)
-        self.conf.update({"start_time_delta": 7776000})
-        start_time = self.scf.get_start_time_from_config(self.conf)
+        conf = {"start_time_delta": 7776000}
+        start_time = self.scf.get_start_time_from_config(conf)
         eq_(datetime(2011, 2, 25, 7, 15, 0), start_time)
 
     def test_stat_collector_factory_creates_sample_time_interval(self):
         seconds = 2592000
-        self.conf.update({'sample_time_interval': seconds})
+        conf = {'sample_time_interval': seconds}
         expected = timedelta(seconds = seconds)
-        actual = self.scf.get_sample_time_interval_from_config(self.conf)
+        actual = self.scf.get_sample_time_interval_from_config(conf)
         eq_(expected, actual)
+    
+    def test_stat_collector_factory_creates_results_package(self):
+        outfile = '/tmp/not-actually-used'
+        conf = {'outfile': outfile}
+        rp = self.scf.get_results_package_from_config(conf)
+        eq_(outfile, rp.get_outfile())
 
 class MockRepositoryFactory(object):
     def __init__(self):
