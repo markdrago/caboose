@@ -1,7 +1,7 @@
 from nose.tools import *
 from unittest import TestCase
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from stats.stat_collector_factory import StatCollectorFactory
 from stats.stat_collector_factory import StatConfigurationInvalidException
@@ -17,7 +17,7 @@ class StatCollectorFactoryTests(TestCase):
         self.scf.set_repo_factory(self.mock_repo_factory)
 
         self.conf = {}
-        for key in ("statname", "repodir"):
+        for key in ("statname", "repodir", "start_time_delta", "sample_time_interval"):
             self.conf[key] = "DEADBEEF"
 
     def test_stat_collector_factory_raises_exception_for_invalid_config_with_msg(self):
@@ -32,13 +32,13 @@ class StatCollectorFactoryTests(TestCase):
     def test_stat_collector_factory_creates_proper_stat(self):
         statname = "my_favorite_stat"
         self.conf.update({ "statname": statname })
-        sc = self.scf.get_stat_collector(self.conf)
+        stat = self.scf.create_stat_from_config(self.conf)
         eq_(statname, self.mock_stat_factory.get_last_stat_created())
 
     def test_stat_collector_factory_creates_proper_repo(self):
         directory = "/home/mdrago/repository_lives_here"
         self.conf.update({ "repodir": directory })
-        sc = self.scf.get_stat_collector(self.conf)
+        repo = self.scf.create_repo_from_config(self.conf)
         eq_(directory, self.mock_repo_factory.get_last_directory())
 
     def test_stat_collector_factory_creates_file_package(self):
@@ -60,12 +60,19 @@ class StatCollectorFactoryTests(TestCase):
         eq_(1, len(fp.file_matchers))
         eq_(glob, fp.file_matchers[0].glob)
 
-    def test_stat_collector_factory_creates_start(self):
+    def test_stat_collector_factory_creates_start_time(self):
         current = datetime(2011, 5, 26, 7, 15, 0)
         self.scf.set_current_time(current)
         self.conf.update({"start_time_delta": 7776000})
         start_time = self.scf.get_start_time_from_config(self.conf)
         eq_(datetime(2011, 2, 25, 7, 15, 0), start_time)
+
+    def test_stat_collector_factory_creates_sample_time_interval(self):
+        seconds = 2592000
+        self.conf.update({'sample_time_interval': seconds})
+        expected = timedelta(seconds = seconds)
+        actual = self.scf.get_sample_time_interval_from_config(self.conf)
+        eq_(expected, actual)
 
 class MockRepositoryFactory(object):
     def __init__(self):

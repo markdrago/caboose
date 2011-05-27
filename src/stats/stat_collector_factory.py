@@ -14,11 +14,21 @@ class StatCollectorFactory(object):
 
     def get_stat_collector(self, conf):
         try:
-            stat = self.stat_factory.get_stat(conf['statname'])
-            repo = self.repo_factory.get_repository(conf['repodir'])
+            stat = self.create_stat_from_config(conf)
+            repo = self.create_repo_from_config(conf)
             files = self.create_file_iterator_from_config(conf)
+            start_time = self.get_start_time_from_config(conf)
+            sample_interval = self.get_sample_time_interval_from_config(conf)
         except KeyError:
             raise StatConfigurationInvalidException("Unable to find required configuration option")
+
+        return StatCollector(repo, sample_interval, files, [stat], start_time)
+
+    def create_stat_from_config(self, conf):
+        return self.stat_factory.get_stat(conf['statname'])
+
+    def create_repo_from_config(self, conf):
+        return self.repo_factory.get_repository(conf['repodir'])
 
     def create_file_iterator_from_config(self, conf):
         return FileIterator(self.create_file_package_from_config)
@@ -37,6 +47,9 @@ class StatCollectorFactory(object):
     def get_start_time_from_config(self, conf):
         delta = timedelta(seconds = conf['start_time_delta'])
         return self.current_time - delta
+
+    def get_sample_time_interval_from_config(self, conf):
+        return timedelta(seconds = conf['sample_time_interval'])
 
     def set_current_time(self, dt):
         self.current_time = dt
