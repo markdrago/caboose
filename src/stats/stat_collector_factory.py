@@ -24,7 +24,7 @@ class StatCollectorFactory(object):
         except KeyError:
             raise StatConfigurationInvalidException("Unable to find required configuration option")
 
-        return StatCollector(repo, sample_interval, files, [stat], start_time)
+        return StatCollector([stat], repo, files, sample_interval, start_time)
 
     def create_stat_from_config(self, conf):
         return self.stat_factory.get_stat(conf['statname'])

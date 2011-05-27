@@ -6,7 +6,7 @@ from repo.repository_iterator import RepositoryIterator
 from results.results_package import ResultsPackage
 
 class StatCollector(object):
-    def __init__(self, repo, delta, files, stats, start=None,
+    def __init__(self, stats, repo, files, delta, start=None,
                  end=datetime.now()):
         self.repo = repo
         self.timedelta = delta

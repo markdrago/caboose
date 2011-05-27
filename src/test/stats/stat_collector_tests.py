@@ -15,8 +15,8 @@ class StatCollectorTests(TestCase):
         date_revs = {datetime(2011, 1, 1): 0, datetime(2011, 1, 31): 1}
         repo = MockDateRepository(date_revs)
         
-        sc = StatCollector(repo, timedelta(days=30),
-                           ['file1'], stats=(SimpleStat(),),
+        sc = StatCollector((SimpleStat(),), repo,
+                           ['file1'], timedelta(days=30),
                            end=datetime(2011, 1, 2))
         stats = sc.get_stats()
         eq_(1, stats.get_date_count())
@@ -29,8 +29,8 @@ class StatCollectorTests(TestCase):
             datetime(2011, 3, 3): 2
         }
         repo = MockDateRepository(date_revs)
-        sc = StatCollector(repo, timedelta(days=30),
-                           ['file1'], stats=(SimpleStat(),),
+        sc = StatCollector((SimpleStat(),), repo,
+                           ['file1'], timedelta(days=30),
                            end=datetime(2011, 3, 4))
         stats = sc.get_stats()
         eq_(3, stats.get_date_count())
@@ -41,8 +41,8 @@ class StatCollectorTests(TestCase):
     def test_stat_collector_handles_multiple_files(self):
         date_revs = {datetime(2011, 1, 1): 0, datetime(2011, 2, 2): 1}
         repo = MockDateRepository(date_revs)
-        sc = StatCollector(repo, timedelta(days=30),
-                           ['file1', 'file2'], stats=(SimpleStat(),),
+        sc = StatCollector((SimpleStat(),), repo,
+                           ['file1', 'file2'], timedelta(days=30),
                            end=datetime(2011, 1, 2))
         stats = sc.get_stats()
         eq_(1, stats.get_date_count())
@@ -52,8 +52,8 @@ class StatCollectorTests(TestCase):
         date_revs = {datetime(2011, 1, 1): 0, datetime(2011, 1, 31): 1}
         repo = MockDateRepository(date_revs)
         
-        sc = StatCollector(repo, timedelta(days=30),
-                           ['file1'], stats=(SimpleStat(), SimpleStat2()),
+        sc = StatCollector((SimpleStat(), SimpleStat2()), repo,
+                           ['file1'], timedelta(days=30),
                            end=datetime(2011, 1, 2))
         stats = sc.get_stats()
         eq_(1, stats.get_date_count())
