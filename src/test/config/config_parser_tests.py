@@ -1,11 +1,27 @@
 from nose.tools import *
 from unittest import TestCase
 
+from os import path
+from shutil import rmtree
+from tempfile import mkdtemp
+
 from config.config_parser import ConfigParser
 
 class ConfigParserTests(TestCase):
     def setUp(self):
         self.cp = ConfigParser()
+
+    def test_parse_file(self):
+        #create test config file
+        directory = mkdtemp('-gb-config-parser-tests')
+        filename = path.join(directory, "config")
+        with open(filename, "w") as f:
+            f.write("""{ "stats" : [ { "statname": "statnamehere" } ] }""")
+        
+        conf = self.cp.parse_file(filename)
+        eq_('statnamehere', conf['stats'][0]['statname'])
+        
+        rmtree(directory)
 
     def test_parse_config_object(self):
         json = """{
