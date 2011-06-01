@@ -27,11 +27,22 @@ class GettingBetterTests(TestCase):
         ok_(stat1conf in self.stat_collector_factory.confs)
         ok_(stat2conf in self.stat_collector_factory.confs)
 
-#    def write_results_from_stat_collectors(self):
-#        sc1 = MockStatCollector()
-#        sc2 = MockStatCollector()
-#        outfile = '/tmp/not-really-used'
-#        self.gb.write_results_from_stat_collectors([sc1, sc2], outfile)
+    def test_get_multiple_outfile_locations(self):
+        stat1conf = { 'outfile': 'file1' }
+        stat2conf = { 'outfile': 'file2' }
+        conf = { 'stats' : [ stat1conf, stat2conf ] }
+
+        outfiles = self.gb.get_outfile_locations(conf)
+        eq_(['file1', 'file2'], list(outfiles))
+
+    def test_writes_results_to_json_outfile(self):
+        statconf = { 'statname': 'stat1', 'outfile': 'outfilename' }
+        conf = { 'stats' : [statconf] }
+        self.gb.config = conf
+        self.gb.run()
+
+        res = self.stat_collector_factory.scs[0].results_package.outfile_requested
+        eq_('outfilename', res)
 
 class MockResultsPackage(object):
     def __init__(self):
@@ -52,9 +63,13 @@ class MockStatCollector(object):
 class MockStatCollectorFactory(object):
     def __init__(self):
         self.confs = []
+        self.scs = []
 
     def get_stat_collector(self, conf):
         self.confs.append(conf)
+        sc = MockStatCollector()
+        self.scs.append(sc)
+        return sc
 
 class MockConfigParser(object):
     def __init__(self):
