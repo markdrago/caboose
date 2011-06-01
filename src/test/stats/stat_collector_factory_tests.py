@@ -45,6 +45,15 @@ class StatCollectorFactoryTests(TestCase):
         conf["dirs"] = [ subdir ]
         fp = self.scf.create_file_package_from_config(conf)
         eq_(set([basedir + '/' + subdir]), set(fp.get_directories()))
+    
+    def test_stat_collector_factory_creates_file_iterator(self):
+        basedir = "/home/mdrago/repository_lives_here"
+        subdir = "TestProject"
+        conf = {}
+        conf["repodir"] = basedir
+        conf["dirs"] = [ subdir ]
+        fi = self.scf.create_file_iterator_from_config(conf)
+        eq_(1, len(fi.get_filepackages()))
 
     def test_stat_collector_factory_creates_matcher_glob(self):
         glob = "*.java"

@@ -16,7 +16,7 @@ class GettingBetter(object):
         for i in range(len(self.stat_collectors)):
             stat_collector = self.stat_collectors[i]
             outfile = self.outfiles[i]
-
+    
             results = stat_collector.get_stats()
             results.write_json_results(outfile)
 
