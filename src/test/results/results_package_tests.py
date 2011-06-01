@@ -65,11 +65,10 @@ class ResultsPackageTests(TestCase):
     def test_result_package_writes_json_to_outfile(self):
         directory = mkdtemp('-gb-results-package-tests')
         filename = path.join(directory, 'outfile')
-        self.rp.set_outfile(filename)
         
         dt = datetime(2011, 03, 18, 19, 10, 0)
         self.rp.add_result(dt, "simplestat", 1234)
-        self.rp.write_json_results()
+        self.rp.write_json_results(filename)
 
         with file(filename, "r") as f:
             written = f.read()

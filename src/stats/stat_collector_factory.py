@@ -53,11 +53,6 @@ class StatCollectorFactory(object):
     def get_sample_time_interval_from_config(self, conf):
         return timedelta(seconds = conf['sample_time_interval'])
 
-    def get_results_package_from_config(self, conf):
-        rp = ResultsPackage()
-        rp.set_outfile(conf['outfile'])
-        return rp
-
     def set_current_time(self, dt):
         self.current_time = dt
 

@@ -72,12 +72,6 @@ class StatCollectorFactoryTests(TestCase):
         actual = self.scf.get_sample_time_interval_from_config(conf)
         eq_(expected, actual)
     
-    def test_stat_collector_factory_creates_results_package(self):
-        outfile = '/tmp/not-actually-used'
-        conf = {'outfile': outfile}
-        rp = self.scf.get_results_package_from_config(conf)
-        eq_(outfile, rp.get_outfile())
-
 class MockRepositoryFactory(object):
     def __init__(self):
         self.last_directory = None
