@@ -12,6 +12,9 @@ class GettingBetterTests(TestCase):
 
         self.stat_collector_factory = MockStatCollectorFactory()
         self.gb.set_stat_collector_factory(self.stat_collector_factory)
+
+        self.results_index = MockResultsIndex()
+        self.gb.set_results_index(self.results_index)
     
     def test_set_configfile_calls_config_parser(self):
         self.gb.set_configfile('hello/there.conf')
@@ -36,13 +39,36 @@ class GettingBetterTests(TestCase):
         eq_(['file1', 'file2'], list(outfiles))
 
     def test_writes_results_to_json_outfile(self):
-        statconf = { 'statname': 'stat1', 'outfile': 'outfilename' }
-        conf = { 'stats' : [statconf] }
+        statconf = { 'statname': 'stat1', 'outfile': 'outfilename', 'description': 'desc goes here' }
+        conf = { 'stats' : [statconf], 'output_directory': '/tmp/notused' }
         self.gb.config = conf
         self.gb.run()
 
         res = self.stat_collector_factory.scs[0].results_package.outfile_requested
         eq_('outfilename', res)
+
+    def test_create_results_index(self):
+        statconf = { 'statname': 'stat1', 'outfile': 'outfilename', 'description': 'desc goes here' }
+        conf = { 'output_directory': '/tmp/notused', 'stats' : [statconf] }
+        self.gb.config = conf
+        self.gb.run()
+
+        eq_('outfilename', self.results_index.filename)
+        eq_('desc goes here', self.results_index.desc)
+        eq_('/tmp/notused', self.results_index.directory_passed)
+
+class MockResultsIndex(object):
+    def __init__(self):
+        self.directory_passed = None
+        self.filename = None
+        self.desc = None
+
+    def add_result(self, description, filename):
+        self.desc = description
+        self.filename = filename
+
+    def write_index(self, directory):
+        self.directory_passed = directory
 
 class MockResultsPackage(object):
     def __init__(self):
