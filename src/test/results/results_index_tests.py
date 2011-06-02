@@ -2,6 +2,9 @@ from nose.tools import *
 from unittest import TestCase
 
 import json
+from os import path
+from shutil import rmtree
+from tempfile import mkdtemp
 
 from results.results_index import ResultsIndex
 
@@ -20,4 +23,24 @@ class ResultsIndexTests(TestCase):
         eq_(1, len(actual['stats']))
         eq_(statdesc, actual['stats'][0]['description'])
         eq_(outfile, actual['stats'][0]['filename'])
+
+    def test_results_index_writes_json_to_disk(self):
+        directory = mkdtemp("-gb-results-index-test")
+        
+        statdesc = "statdesc"
+        outfile = "outfile"
+        self.ri.add_result(statdesc, outfile)
+
+        self.ri.write_index(directory)
+
+        expected_filename = path.join(directory, "index.json")
+        with file(expected_filename, "r") as f:
+            actual = json.loads(f.read())
+
+        ok_('stats' in actual)
+        eq_(1, len(actual['stats']))
+        eq_(statdesc, actual['stats'][0]['description'])
+        eq_(outfile, actual['stats'][0]['filename'])
+        
+        rmtree(directory)
 
