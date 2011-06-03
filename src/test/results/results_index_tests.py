@@ -29,7 +29,7 @@ class ResultsIndexTests(TestCase):
         
         statdesc = "statdesc"
         outfile = "outfile"
-        self.ri.add_result(statdesc, outfile)
+        self.ri.add_result(statdesc, path.join(directory, outfile))
 
         self.ri.write_index(directory)
 
