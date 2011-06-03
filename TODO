@@ -1,0 +1,2 @@
+- does `hg up -d <date>` cross branches?  probably.  avoid this somehow.
+
