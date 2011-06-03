@@ -33,10 +33,11 @@ class GettingBetterTests(TestCase):
     def test_get_multiple_outfile_locations(self):
         stat1conf = { 'outfile': 'file1' }
         stat2conf = { 'outfile': 'file2' }
-        conf = { 'stats' : [ stat1conf, stat2conf ] }
+        conf = { 'output_directory': '/tmp/notused',
+                 'stats' : [ stat1conf, stat2conf ] }
 
         outfiles = self.gb.get_outfile_locations(conf)
-        eq_(['file1', 'file2'], list(outfiles))
+        eq_(['/tmp/notused/file1', '/tmp/notused/file2'], list(outfiles))
 
     def test_writes_results_to_json_outfile(self):
         statconf = { 'statname': 'stat1', 'outfile': 'outfilename', 'description': 'desc goes here' }
@@ -45,7 +46,7 @@ class GettingBetterTests(TestCase):
         self.gb.run()
 
         res = self.stat_collector_factory.scs[0].results_package.outfile_requested
-        eq_('outfilename', res)
+        eq_('/tmp/notused/outfilename', res)
 
     def test_create_results_index(self):
         statconf = { 'statname': 'stat1', 'outfile': 'outfilename', 'description': 'desc goes here' }
@@ -53,7 +54,7 @@ class GettingBetterTests(TestCase):
         self.gb.config = conf
         self.gb.run()
 
-        eq_('outfilename', self.results_index.filename)
+        eq_('/tmp/notused/outfilename', self.results_index.filename)
         eq_('desc goes here', self.results_index.desc)
         eq_('/tmp/notused', self.results_index.directory_passed)
 

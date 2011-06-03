@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+from os import path
 
 from config.config_parser import ConfigParser
 from stats.stat_collector_factory import StatCollectorFactory
@@ -39,7 +40,11 @@ class GettingBetter(object):
         self.config = self.config_parser.parse_file(configfile)
 
     def get_outfile_locations(self, conf):
-        return [statconf['outfile'] for statconf in conf['stats']]
+        results = []
+        output_dir = conf['output_directory']
+        for statconf in conf['stats']:
+            results.append(path.join(output_dir, statconf['outfile']))
+        return results
 
     def get_stat_descriptions(self, conf):
         return [statconf['description'] for statconf in conf['stats']]
