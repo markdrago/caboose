@@ -13,7 +13,7 @@ from files.file_package import FilePackage
 
 class StatLinesTests(TestCase):
     def test_proper_number_of_lines_are_counted_in_single_file(self):
-        directory = mkdtemp("-gb-java-ncss-single-test")
+        directory = mkdtemp("-caboose-java-ncss-single-test")
         self._create_file_with_lines(directory, 2, 4, 2)
 
         fp = FilePackage()
@@ -26,7 +26,7 @@ class StatLinesTests(TestCase):
         rmtree(directory)
 
     def test_proper_number_of_lines_are_counted_in_multiple_files(self):
-        directory = mkdtemp("-gb-numlines-multiple-test")
+        directory = mkdtemp("-caboose-numlines-multiple-test")
         self._create_file_with_lines(directory, 2, 4, 2)
         self._create_file_with_lines(directory, 8, 3, 11)
 
@@ -40,7 +40,7 @@ class StatLinesTests(TestCase):
         rmtree(directory)
     
     def test_proper_number_of_lines_are_counted_in_inner_dir(self):
-        directory = mkdtemp("-gb-numlines-inner-dir-test")
+        directory = mkdtemp("-caboose-numlines-inner-dir-test")
         inner = mkdtemp("-inner-dir", dir=directory)
         self._create_file_with_lines(directory, 2, 3, 4)
         self._create_file_with_lines(inner, 5, 6, 7)
@@ -55,7 +55,7 @@ class StatLinesTests(TestCase):
         rmtree(directory)
 
     def test_proper_number_of_lines_in_multiple_dirs(self):
-        directory = mkdtemp("-gb-numlines-multiple-dir-test")
+        directory = mkdtemp("-caboose-numlines-multiple-dir-test")
         inner1 = mkdtemp("-inner-dir1", dir=directory)
         inner2 = mkdtemp("-inner-dir2", dir=directory)
         inner3 = mkdtemp("-inner-dir3", dir=directory)
@@ -74,7 +74,7 @@ class StatLinesTests(TestCase):
         rmtree(directory)
 
     def test_stat_lines_counts_zero_if_directory_does_not_exist(self):
-        directory = mkdtemp("-gb-non-exist-dir-test")
+        directory = mkdtemp("-caboose-non-exist-dir-test")
         inner = path.join(directory, 'nonexistant')
 
         fp = FilePackage()
@@ -88,7 +88,7 @@ class StatLinesTests(TestCase):
     
     #this test used to cause an OSError: Argument list too long
     def test_stat_lines_works_with_absurd_number_of_files(self):
-        directory = mkdtemp("-gb-absurd-file-count-test")
+        directory = mkdtemp("-caboose-absurd-file-count-test")
         self._create_file_with_lines(directory, 5, 6, 7)
 
         fp = FilePackage()

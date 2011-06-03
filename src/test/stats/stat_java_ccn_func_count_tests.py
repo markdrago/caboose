@@ -14,7 +14,7 @@ class StatJavaMeanCcnTests(TestCase):
         self.ccn_file_creator = CcnFileCreator()
 
     def test_zero_ccn_func_count_when_limit_not_met(self):
-        directory = mkdtemp("-gb-java-ccn-count-low-single-test")
+        directory = mkdtemp("-caboose-java-ccn-count-low-single-test")
         self.ccn_file_creator.create_file_with_ccn(1, directory)
 
         fp = FilePackage()
@@ -28,7 +28,7 @@ class StatJavaMeanCcnTests(TestCase):
         rmtree(directory)
 
     def test_ccn_func_count_when_over_limit_single(self):
-        directory = mkdtemp("-gb-java-ccn-count-high-single-test")
+        directory = mkdtemp("-caboose-java-ccn-count-high-single-test")
         self.ccn_file_creator.create_file_with_ccn(5, directory)
 
         fp = FilePackage()
@@ -42,7 +42,7 @@ class StatJavaMeanCcnTests(TestCase):
         rmtree(directory)
 
     def test_ccn_func_count_when_over_limit_multiple(self):
-        directory = mkdtemp("-gb-java-ccn-count-high-single-test")
+        directory = mkdtemp("-caboose-java-ccn-count-high-single-test")
         self.ccn_file_creator.create_file_with_funcs_with_ccns(directory, [5, 1, 3, 2])
 
         fp = FilePackage()

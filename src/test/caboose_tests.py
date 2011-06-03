@@ -1,30 +1,30 @@
 from nose.tools import *
 from unittest import TestCase
 
-from getting_better import GettingBetter
+from caboose import Caboose
 
-class GettingBetterTests(TestCase):
+class CabooseTests(TestCase):
     def setUp(self):
-        self.gb = GettingBetter()
+        self.caboose = Caboose()
 
         self.config_parser = MockConfigParser()
-        self.gb.set_config_parser(self.config_parser)
+        self.caboose.set_config_parser(self.config_parser)
 
         self.stat_collector_factory = MockStatCollectorFactory()
-        self.gb.set_stat_collector_factory(self.stat_collector_factory)
+        self.caboose.set_stat_collector_factory(self.stat_collector_factory)
 
         self.results_index = MockResultsIndex()
-        self.gb.set_results_index(self.results_index)
+        self.caboose.set_results_index(self.results_index)
     
     def test_set_configfile_calls_config_parser(self):
-        self.gb.set_configfile('hello/there.conf')
+        self.caboose.set_configfile('hello/there.conf')
         eq_('hello/there.conf', self.config_parser.last_config_file)
 
     def test_create_multiple_stat_collectors(self):
         stat1conf = { 'statname': 'stat1' }
         stat2conf = { 'statname': 'stat2' }
         conf = { 'stats' : [ stat1conf, stat2conf ] }
-        scs = self.gb.create_stat_collectors(conf)
+        scs = self.caboose.create_stat_collectors(conf)
 
         eq_(2, len(self.stat_collector_factory.confs))
         ok_(stat1conf in self.stat_collector_factory.confs)
@@ -36,14 +36,14 @@ class GettingBetterTests(TestCase):
         conf = { 'output_directory': '/tmp/notused',
                  'stats' : [ stat1conf, stat2conf ] }
 
-        outfiles = self.gb.get_outfile_locations(conf)
+        outfiles = self.caboose.get_outfile_locations(conf)
         eq_(['/tmp/notused/file1', '/tmp/notused/file2'], list(outfiles))
 
     def test_writes_results_to_json_outfile(self):
         statconf = { 'statname': 'stat1', 'outfile': 'outfilename', 'description': 'desc goes here' }
         conf = { 'stats' : [statconf], 'output_directory': '/tmp/notused' }
-        self.gb.config = conf
-        self.gb.run()
+        self.caboose.config = conf
+        self.caboose.run()
 
         res = self.stat_collector_factory.scs[0].results_package.outfile_requested
         eq_('/tmp/notused/outfilename', res)
@@ -51,8 +51,8 @@ class GettingBetterTests(TestCase):
     def test_create_results_index(self):
         statconf = { 'statname': 'stat1', 'outfile': 'outfilename', 'description': 'desc goes here' }
         conf = { 'output_directory': '/tmp/notused', 'stats' : [statconf] }
-        self.gb.config = conf
-        self.gb.run()
+        self.caboose.config = conf
+        self.caboose.run()
 
         eq_('/tmp/notused/outfilename', self.results_index.filename)
         eq_('desc goes here', self.results_index.desc)

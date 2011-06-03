@@ -63,7 +63,7 @@ class ResultsPackageTests(TestCase):
         eq_(set(self.rp.get_dates()), set([dt1, dt2]))
 
     def test_result_package_writes_json_to_outfile(self):
-        directory = mkdtemp('-gb-results-package-tests')
+        directory = mkdtemp('-caboose-results-package-tests')
         filename = path.join(directory, 'outfile')
         
         dt = datetime(2011, 03, 18, 19, 10, 0)

@@ -7,7 +7,7 @@ from config.config_parser import ConfigParser
 from stats.stat_collector_factory import StatCollectorFactory
 from results.results_index import ResultsIndex
 
-class GettingBetter(object):
+class Caboose(object):
     def __init__(self):
         self.set_config_parser(ConfigParser())
         self.set_stat_collector_factory(StatCollectorFactory())
@@ -59,7 +59,7 @@ class GettingBetter(object):
         self.results_index = ri
 
 if __name__ == '__main__':
-    gb = GettingBetter()
-    gb.set_configfile(sys.argv[1])
-    gb.run()
+    caboose = Caboose()
+    caboose.set_configfile(sys.argv[1])
+    caboose.run()
 

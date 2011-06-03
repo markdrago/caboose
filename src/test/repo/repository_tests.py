@@ -30,7 +30,7 @@ class RepositoryTests(TestCase):
         r.get_base_directory()
     
     def test_get_mercurial_repo_from_factory_for_directory_with_hg_repo(self):
-        directory = mkdtemp('-gb-rep-works-test')
+        directory = mkdtemp('-caboose-rep-works-test')
         MercurialRepository(directory, init=True)
         repo = RepositoryFactory.get_repository(directory)
         eq_(MercurialRepository, type(repo))
@@ -38,7 +38,7 @@ class RepositoryTests(TestCase):
 
     @raises(Exception)
     def test_repository_factory_throws_for_directory_without_repo(self):
-        directory = mkdtemp('-gb-rep-fails-correctly-test')
+        directory = mkdtemp('-caboose-rep-fails-correctly-test')
         try:
             repo = RepositoryFactory.get_repository(directory)
         finally:

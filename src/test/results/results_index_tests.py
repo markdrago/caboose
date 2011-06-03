@@ -25,7 +25,7 @@ class ResultsIndexTests(TestCase):
         eq_(outfile, actual['stats'][0]['filename'])
 
     def test_results_index_writes_json_to_disk(self):
-        directory = mkdtemp("-gb-results-index-test")
+        directory = mkdtemp("-caboose-results-index-test")
         
         statdesc = "statdesc"
         outfile = "outfile"

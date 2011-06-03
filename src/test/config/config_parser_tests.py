@@ -13,7 +13,7 @@ class ConfigParserTests(TestCase):
 
     def test_parse_file(self):
         #create test config file
-        directory = mkdtemp('-gb-config-parser-tests')
+        directory = mkdtemp('-caboose-config-parser-tests')
         filename = path.join(directory, "config")
         with open(filename, "w") as f:
             f.write("""{ "stats" : [ { "statname": "statnamehere" } ] }""")

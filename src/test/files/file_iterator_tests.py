@@ -10,7 +10,7 @@ from files.file_package import FilePackage
 
 class FileIteratorTests(TestCase):
     def setUp(self):
-        self.directory = mkdtemp('-gb-file-iterator-tests')
+        self.directory = mkdtemp('-caboose-file-iterator-tests')
         self.file_package = FilePackage()
         self.file_package.add_directory(self.directory)
         self.file_iterator = FileIterator([self.file_package,])

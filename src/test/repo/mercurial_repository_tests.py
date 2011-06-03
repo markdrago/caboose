@@ -12,7 +12,7 @@ from repo.mercurial_repository import MercurialRepository
 
 class MercurialRepositoryTests(TestCase):
     def setUp(self):
-        self.directory = mkdtemp('-gb-hg-repo-tests')
+        self.directory = mkdtemp('-caboose-hg-repo-tests')
     
     def tearDown(self):
         rmtree(self.directory)

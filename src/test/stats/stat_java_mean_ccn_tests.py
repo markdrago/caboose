@@ -16,7 +16,7 @@ class StatJavaMeanCcnTests(TestCase):
         self.ccn_file_creator = CcnFileCreator()
 
     def test_proper_ccn_is_found_in_single_file(self):
-        directory = mkdtemp("-gb-java-ccn-single-test")
+        directory = mkdtemp("-caboose-java-ccn-single-test")
         self.ccn_file_creator.create_file_with_ccn(3, directory)
 
         fp = FilePackage()
@@ -29,7 +29,7 @@ class StatJavaMeanCcnTests(TestCase):
         rmtree(directory)
 
     def test_proper_ccn_is_found_in_multiple_files(self):
-        directory = mkdtemp("-gb-java-ccn-multiple-test")
+        directory = mkdtemp("-caboose-java-ccn-multiple-test")
         self.ccn_file_creator.create_file_with_ccn(2, directory)
         self.ccn_file_creator.create_file_with_ccn(8, directory)
 
@@ -43,7 +43,7 @@ class StatJavaMeanCcnTests(TestCase):
         rmtree(directory)
 
     def test_proper_ccn_is_found_in_multiple_files_float(self):
-        directory = mkdtemp("-gb-java-ccn-multiple-float-test")
+        directory = mkdtemp("-caboose-java-ccn-multiple-float-test")
         self.ccn_file_creator.create_file_with_ccn(3, directory)
         self.ccn_file_creator.create_file_with_ccn(8, directory)
 
@@ -57,7 +57,7 @@ class StatJavaMeanCcnTests(TestCase):
         rmtree(directory)
     
     def test_stat_lines_counts_zero_if_directory_does_not_exist(self):
-        directory = mkdtemp("-gb-ccn-non-exist-dir-test")
+        directory = mkdtemp("-caboose-ccn-non-exist-dir-test")
         inner = path.join(directory, 'nonexistant')
 
         fp = FilePackage()

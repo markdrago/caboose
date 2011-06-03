@@ -9,7 +9,7 @@ from files.file_matcher_glob import FileMatcherGlob
 
 class FileMatcherGlobTests(TestCase):
     def setUp(self):
-        self.directory = mkdtemp('-gb-file-matcher-glob-tests')
+        self.directory = mkdtemp('-caboose-file-matcher-glob-tests')
 
     def tearDown(self):
         rmtree(self.directory)
