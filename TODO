@@ -1,2 +1,4 @@
 - does `hg up -d <date>` cross branches?  probably.  avoid this somehow.
+- make ccn func count work by specifying ccn limit in config
+- separate file name from dataname by including dataname in a json file
 
