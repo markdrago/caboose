@@ -52,6 +52,24 @@ class MercurialRepositoryTests(TestCase):
         self.create_test_changesets(hgrepo, 3, dates=dates)
         eq_('9699b017dc594de1d07ebc994e63aeddf31da8b8', hgrepo.get_revision_before_date(datetime(2011, 2, 2, 4, 4, 4)))
 
+    def test_get_revision_before_date_time_stays_on_branch(self):
+        hgrepo = MercurialRepository(self.directory, init=True)
+        dates = ('2011-01-01 01:01:01', '2011-03-03 03:03:03')
+        self.create_test_changesets(hgrepo, 2, dates=dates)
+
+        hgrepo.create_and_switch_to_branch('avoidbranch')
+        self.create_test_changesets(hgrepo, 1, dates=('2011-02-02 02:02:02',))
+
+        commands.update(hgrepo.get_ui(), hgrepo.get_repo(), rev='default')
+
+        #should match commit on 2011-01-01, not 2011-02-02
+        eq_('f536cd23c411d90bad9ac58091c57957bd405597', hgrepo.get_revision_before_date(datetime(2011, 2, 2, 4, 4, 4)))
+
+    def test_create_and_switch_to_branch(self):
+        hgrepo = MercurialRepository(self.directory, init=True)
+        hgrepo.create_and_switch_to_branch('newbranch')
+        eq_('newbranch', hgrepo.get_repo()[None].branch())
+
     def test_get_date_of_earliest_commit(self):
         hgrepo = MercurialRepository(self.directory, init=True)
         dates = ('2011-01-01 01:01:01', '2011-02-02 02:02:02', '2011-03-03 03:03:03')

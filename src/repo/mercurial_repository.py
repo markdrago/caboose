@@ -10,6 +10,7 @@ dateformat = '%Y-%m-%d %H:%M:%S'
 #  get_revision_before_date(self, date)
 #    date is a datetime object
 #    returns an object that can be passed to switch_to_revision()
+#    should only match commits on the current branch (never switch branches)
 #  switch_to_revision(self, rev)
 #    rev is an object that was returned from get_revision_before_date()
 #  get_base_directory(self)
@@ -18,6 +19,7 @@ dateformat = '%Y-%m-%d %H:%M:%S'
 class MercurialRepository(object):
     def __init__(self, directory='.', init=False):
         self.ui = ui.ui()
+        self.ui._buffers.append([])
         self.ui.setconfig('ui', 'quiet', True)
         if init and not os.path.isdir(os.path.join(directory, '.hg')):
             commands.init(self.ui, directory)
@@ -31,9 +33,11 @@ class MercurialRepository(object):
         commands.update(self.ui, self.repo, date=datestr)
     
     def get_revision_before_date(self, date):
-        datestr = self.date_as_string(date)
-        rev = int(cmdutil.finddate(self.ui, self.repo, "<%s" % datestr))
-        return self.repo[rev].hex()
+        datestr = "<%s" % self.date_as_string(date)
+        branch = self.repo[None].branch()
+        commands.log(self.ui, self.repo, onlybranch=[branch], template="{node}\n", date=datestr, rev='', user='', limit=1)
+        hexid = self.ui.popbuffer()
+        return hexid.strip()
     
     def switch_to_before_date(self, date):
         datestr = self.date_as_string(date)
@@ -51,6 +55,9 @@ class MercurialRepository(object):
         chgset = working_directory.p1()
         return chgset.hex()
 
+    def create_and_switch_to_branch(self, branchname):
+        commands.branch(self.ui, self.repo, label=branchname)
+
     def get_ui(self):
         return self.ui
         
@@ -59,3 +66,4 @@ class MercurialRepository(object):
 
     def date_as_string(self, date):
         return date.strftime(dateformat)
+
