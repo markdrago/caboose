@@ -5,7 +5,7 @@ class StatJavaCcnFuncCount(AbstractJavaCcnStat):
         self.ccn_limit = ccn_limit
 
     def get_name(self):
-        return "ccnfunctioncount"
+        return "java_ccn_func_count"
         
     def get_stat(self):
         ccns = self.get_ccn_list()

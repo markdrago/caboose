@@ -7,7 +7,7 @@ class StatJavaNcss(Statistic):
         self._set_ncss_command("javancss -ncss | sed -e 's/Java NCSS: //'")
 
     def get_name(self):
-        return "ncss"
+        return "java_ncss"
 
     def get_stat(self):
         filename = self.write_filenames_to_temp_file()

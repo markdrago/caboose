@@ -1,3 +1,7 @@
+value:
 - make ccn func count work by specifying ccn limit in config
 - separate file name from dataname by including dataname in a json file
+
+tech debt:
+- remove duplicate stat name strings in stat and stat_factory
 
