@@ -6,12 +6,12 @@ from repo.repository_iterator import RepositoryIterator
 from results.results_package import ResultsPackage
 
 class StatCollector(object):
-    def __init__(self, stats, repo, files, delta, start=None,
+    def __init__(self, stat, repo, files, delta, start=None,
                  end=datetime.now()):
         self.repo = repo
         self.timedelta = delta
         self.files = files
-        self.stats = stats
+        self.stat = stat
         
         self.end = end
         self.start = start
@@ -24,11 +24,9 @@ class StatCollector(object):
         
         results = ResultsPackage()
         for date in ri:
-
-            for stat in self.stats:
-                stat.set_files(self.files)
-                stat_result = stat.get_stat()
-                results.add_result(date, stat.get_name(), stat_result)
+            self.stat.set_files(self.files)
+            stat_result = self.stat.get_stat()
+            results.add_result(date, stat_result)
 
 #            self.print_one_day_results(date, stat_results)
 

@@ -3,21 +3,14 @@ import json
 class ResultsPackage(object):
     def __init__(self):
         self.results = {}
-        self.statnames = []
     
-    def add_result(self, date, name, result):
+    def add_result(self, date, result):
         if date not in self.results:
             self.results[date] = {}
 
-        if name not in self.statnames:
-            self.statnames.append(name)
-
-        self.results[date][name] = result
+        self.results[date] = result
     
-    def get_result(self, date, name):
-        return self.results[date][name]
-
-    def get_results_for_date(self, date):
+    def get_result(self, date):
         return self.results[date]
 
     def get_date_count(self):
