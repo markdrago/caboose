@@ -108,7 +108,7 @@ class StatLinesTests(TestCase):
     
     def test_stat_has_right_name(self):
         stat = StatJavaNcss()
-        eq_(stat.get_name(), "ncss")
+        eq_(stat.get_name(), "java_ncss")
     
     @nottest
     def _create_file_with_lines(self, directory, source_lines, non_source_lines, blank_lines, suffix=".java"):

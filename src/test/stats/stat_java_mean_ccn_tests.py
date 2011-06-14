@@ -71,7 +71,7 @@ class StatJavaMeanCcnTests(TestCase):
     
     def test_stat_has_right_name(self):
         stat = StatJavaMeanCcn()
-        eq_(stat.get_name(), "meanccn")
+        eq_(stat.get_name(), "java_mean_ccn")
     
 
 
