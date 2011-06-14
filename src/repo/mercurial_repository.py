@@ -19,7 +19,6 @@ dateformat = '%Y-%m-%d %H:%M:%S'
 class MercurialRepository(object):
     def __init__(self, directory='.', init=False):
         self.ui = ui.ui()
-        self.ui._buffers.append([])
         self.ui.setconfig('ui', 'quiet', True)
         if init and not os.path.isdir(os.path.join(directory, '.hg')):
             commands.init(self.ui, directory)
@@ -35,10 +34,11 @@ class MercurialRepository(object):
     def get_revision_before_date(self, date):
         datestr = "<%s" % self.date_as_string(date)
         branch = self.repo[None].branch()
-        commands.log(self.ui, self.repo, onlybranch=[branch], template="{node}\n", date=datestr, rev='', user='', limit=1)
+        self.ui.pushbuffer()
+        commands.log(self.ui, self.repo, branch=[branch], template="{node}\n", date=datestr, rev='', user='', limit=1)
         hexid = self.ui.popbuffer()
         return hexid.strip()
-    
+
     def switch_to_before_date(self, date):
         datestr = self.date_as_string(date)
         commands.update(self.ui, self.repo, date="<%s" % datestr)
