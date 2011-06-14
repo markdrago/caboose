@@ -55,3 +55,5 @@ class StatJavaMeanCcnTests(TestCase):
         eq_(2, stat.get_stat())
         rmtree(directory)
 
+    def test_stat_has_right_name(self):
+        eq_(StatJavaCcnFuncCount.get_name(), "java_ccn_func_count")

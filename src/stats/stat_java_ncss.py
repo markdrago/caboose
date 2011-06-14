@@ -2,12 +2,13 @@ from statistic import Statistic
 import os
 
 class StatJavaNcss(Statistic):
+    @classmethod
+    def get_name(clazz):
+        return "java_ncss"
+
     def __init__(self):
         Statistic.__init__(self)
         self._set_ncss_command("javancss -ncss | sed -e 's/Java NCSS: //'")
-
-    def get_name(self):
-        return "java_ncss"
 
     def get_stat(self):
         filename = self.write_filenames_to_temp_file()

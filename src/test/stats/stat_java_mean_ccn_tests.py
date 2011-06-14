@@ -70,8 +70,7 @@ class StatJavaMeanCcnTests(TestCase):
         rmtree(directory)
     
     def test_stat_has_right_name(self):
-        stat = StatJavaMeanCcn()
-        eq_(stat.get_name(), "java_mean_ccn")
+        eq_(StatJavaMeanCcn.get_name(), "java_mean_ccn")
     
 
 

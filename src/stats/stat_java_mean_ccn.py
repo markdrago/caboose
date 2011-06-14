@@ -1,7 +1,8 @@
 from abstract_java_ccn_stat import AbstractJavaCcnStat
 
 class StatJavaMeanCcn(AbstractJavaCcnStat):
-    def get_name(self):
+    @classmethod
+    def get_name(clazz):
         return "java_mean_ccn"
         
     def get_stat(self):

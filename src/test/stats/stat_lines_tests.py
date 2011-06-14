@@ -87,8 +87,7 @@ class StatLinesTests(TestCase):
         rmtree(directory)
 
     def test_stat_has_right_name(self):
-        stat = StatLines()
-        eq_(stat.get_name(), "lines")
+        eq_(StatLines.get_name(), "lines")
     
     @nottest
     def _create_file_with_n_lines(self, directory, count, suffix='.java'):
