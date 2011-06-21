@@ -63,7 +63,7 @@ class MercurialRepositoryTests(TestCase):
         commands.update(hgrepo.get_ui(), hgrepo.get_repo(), rev='default')
 
         #should match commit on 2011-01-01, not 2011-02-02
-        eq_('f536cd23c411d90bad9ac58091c57957bd405597', hgrepo.get_revision_before_date(datetime(2011, 2, 2, 4, 4, 4)))
+        eq_('f957b16de26a4879c255762cee97797a64e28f28', hgrepo.get_revision_before_date(datetime(2011, 2, 2, 4, 4, 4)))
 
     def test_create_and_switch_to_branch(self):
         hgrepo = MercurialRepository(self.directory, init=True)
