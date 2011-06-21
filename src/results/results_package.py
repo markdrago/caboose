@@ -18,7 +18,8 @@ class ResultsPackage(object):
 
     def get_json(self):
         json_results = self._get_results_with_javascript_dates()
-        return json.dumps(json_results, indent=2)
+        complete = { "stats" : json_results }
+        return json.dumps(complete, indent=2)
 
     def write_json_results(self, outfile):
         res = self.get_json()

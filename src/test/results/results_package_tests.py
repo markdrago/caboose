@@ -43,7 +43,7 @@ class ResultsPackageTests(TestCase):
     def test_result_package_simple_json_output(self):
         dt = datetime(2011, 03, 18, 19, 10, 0)
         self.rp.add_result(dt, 1234)
-        expected='{\n  "1300489800000": 1234\n}'
+        expected='{\n  "stats": {\n    "1300489800000": 1234\n  }\n}'
         eq_(expected, self.rp.get_json())
     
     def test_result_package_gives_list_of_dates(self):
@@ -65,7 +65,7 @@ class ResultsPackageTests(TestCase):
         with file(filename, "r") as f:
             written = f.read()
 
-        expected='{\n  "1300489800000": 1234\n}'
+        expected='{\n  "stats": {\n    "1300489800000": 1234\n  }\n}'
         eq_(expected, written)
         rmtree(directory)
 
