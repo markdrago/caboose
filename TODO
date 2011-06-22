@@ -1,5 +1,7 @@
 value:
 - make % of code in a given subset of dirs stat work w/ config
+  - perhaps add ability to have a stat which is not written to index
+  - then have a stat which reads from already-written results files
 
 tech debt:
-
+- grep for TODO
