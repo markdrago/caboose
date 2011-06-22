@@ -30,6 +30,7 @@ class StatCollectorFactoryTests(TestCase):
         conf = { "statname": statname }
         stat = self.scf.create_stat_from_config(conf)
         eq_(statname, self.mock_stat_factory.get_last_stat_created())
+        eq_(conf, self.mock_stat_factory.get_last_config_passed())
 
     def test_stat_collector_factory_creates_proper_repo(self):
         directory = "/home/mdrago/repository_lives_here"
@@ -94,13 +95,18 @@ class MockRepositoryFactory(object):
 class MockStatFactory(object):
     def __init__(self):
         self.last_stat_created = None
+        self.last_config_passed = None
 
-    def get_stat(self, statname):
+    def get_stat(self, statname, conf=None):
         self.last_stat_created = statname
+        self.last_config_passed = conf
         return None
 
     def get_last_stat_created(self):
         return self.last_stat_created
+    
+    def get_last_config_passed(self):
+        return self.last_config_passed
 
     def return_non_existant_stat(self):
         self.get_stat_returns_non_existant = True

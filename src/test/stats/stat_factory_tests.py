@@ -32,4 +32,10 @@ class StatFactoryTests(TestCase):
     def test_create_java_ccn_func_count(self):
         stat = self.sf.get_stat("java_ccn_func_count")
         eq_(StatJavaCcnFuncCount, type(stat))
+        
+    def test_create_stat_with_stat_conf(self):
+        conf = { "statname": "java_mean_ccn", "ccn_limit": 10 }
+        stat = self.sf.get_stat("java_ccn_func_count", conf)
+        eq_(StatJavaCcnFuncCount, type(stat))
+        eq_(10, stat.ccn_limit)
 

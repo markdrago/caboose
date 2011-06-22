@@ -7,12 +7,18 @@ class StatFactory(object):
     def __init__(self):
         self.stat_classes = (StatLines, StatJavaNcss, StatJavaMeanCcn, StatJavaCcnFuncCount)
 
-    def get_stat(self, statname):
+    def get_stat(self, statname, conf={}):
+        stat = None
         for statclass in self.stat_classes:
             if statname == statclass.get_name():
-                return statclass()
+                stat = statclass()
+                break
 
-        raise StatDoesNotExistException()
+        if stat is None:
+            raise StatDoesNotExistException()
+        
+        stat.set_config(conf)
+        return stat
 
 class StatDoesNotExistException(Exception):
     pass

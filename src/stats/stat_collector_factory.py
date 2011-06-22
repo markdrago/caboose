@@ -27,7 +27,7 @@ class StatCollectorFactory(object):
         return StatCollector(stat, repo, files, sample_interval, start_time)
 
     def create_stat_from_config(self, conf):
-        return self.stat_factory.get_stat(conf['statname'])
+        return self.stat_factory.get_stat(conf['statname'], conf)
 
     def create_repo_from_config(self, conf):
         return self.repo_factory.get_repository(conf['repodir'])

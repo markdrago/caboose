@@ -5,6 +5,10 @@ class StatJavaCcnFuncCount(AbstractJavaCcnStat):
     def get_name(clazz):
         return "java_ccn_func_count"
 
+    def set_config(self, conf):
+        if 'ccn_limit' in conf:
+            self.set_ccn_limit(conf['ccn_limit'])
+
     def set_ccn_limit(self, ccn_limit):
         self.ccn_limit = ccn_limit
 
