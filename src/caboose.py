@@ -15,8 +15,9 @@ class Caboose(object):
     def run(self):
         for runner in self.get_stat_runners():
             runner.run()
-            self.results_index.add_result(runner.get_description(),
-                                          runner.get_outfile_location())
+            if runner.include_in_results_index():
+                self.results_index.add_result(runner.get_description(),
+                                              runner.get_outfile_location())
         self.results_index.write_index(self.get_output_directory())
 
     def set_configfile(self, configfile):

@@ -32,3 +32,9 @@ class StatRunner(object):
     def get_description(self):
         return self.conf['description']
 
+    def include_in_results_index(self):
+        key = 'include_in_results_index'
+        if key in self.conf and self.conf[key] == False:
+            return False
+        return True
+

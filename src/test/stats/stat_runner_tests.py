@@ -33,6 +33,15 @@ class StatRunnerTests(TestCase):
 
         res = self.stat_collector_factory.scs[0].results_package.outfile_requested
         eq_('/tmp/notused/outfilename', res)
+    
+    def test_should_be_written_to_index(self):
+        statconf = { 'include_in_results_index': False }
+        self.stat_runner.set_conf(statconf)
+        
+        eq_(False, self.stat_runner.include_in_results_index())
+
+    def test_include_in_results_index_default_to_true(self):
+        eq_(True, self.stat_runner.include_in_results_index())
 
 class MockResultsPackage(object):
     def __init__(self):

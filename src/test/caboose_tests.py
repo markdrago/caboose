@@ -32,6 +32,15 @@ class CabooseTests(TestCase):
         eq_('/tmp/notused/outfilename', self.results_index.filename)
         eq_('desc goes here', self.results_index.desc)
         eq_('/tmp/notused', self.results_index.directory_passed)
+    
+    def test_exclude_item_from_results_index(self):
+        statconf = { 'statname': 'stat1', 'include_in_results_index': False, 'outfile': 'outfilename', 'description': 'desc goes here' }
+        conf = { 'output_directory': '/tmp/notused', 'stats' : [statconf] }
+        self.caboose.config = conf
+        self.caboose.run()
+        
+        eq_(None, self.results_index.desc)
+        eq_(None, self.results_index.filename)
 
 class MockResultsIndex(object):
     def __init__(self):
