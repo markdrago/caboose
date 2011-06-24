@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from stat_factory import StatFactory
-from stat_collector import StatCollector
+from repo_stat_collector import RepoStatCollector
 from repo.repository_factory import RepositoryFactory
 from files.file_package import FilePackage
 from files.file_iterator import FileIterator
@@ -24,7 +24,7 @@ class StatCollectorFactory(object):
         except KeyError:
             raise StatConfigurationInvalidException("Unable to find required configuration option")
 
-        return StatCollector(stat, repo, files, sample_interval, start_time)
+        return RepoStatCollector(stat, repo, files, sample_interval, start_time)
 
     def create_stat_from_config(self, conf):
         return self.stat_factory.get_stat(conf['statname'], conf)

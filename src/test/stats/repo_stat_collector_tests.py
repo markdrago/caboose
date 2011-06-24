@@ -8,16 +8,16 @@ from mercurial import commands
 from datetime import datetime, timedelta
 
 from test.repo.mock_date_repository import MockDateRepository
-from stats.stat_collector import StatCollector    
+from stats.repo_stat_collector import RepoStatCollector    
 
-class StatCollectorTests(TestCase):
+class RepoStatCollectorTests(TestCase):
     def test_stat_collector_gathers_single_simple_stat(self):
         date_revs = {datetime(2011, 1, 1): 0, datetime(2011, 1, 31): 1}
         repo = MockDateRepository(date_revs)
 
-        sc = StatCollector(SimpleStat(), repo,
-                           ['file1'], timedelta(days=30),
-                           end=datetime(2011, 1, 2))
+        sc = RepoStatCollector(SimpleStat(), repo,
+                               ['file1'], timedelta(days=30),
+                               end=datetime(2011, 1, 2))
         stats = sc.get_stats()
         eq_(1, stats.get_date_count())
         eq_(1, stats.get_result(datetime(2011, 1, 1)))
@@ -29,9 +29,9 @@ class StatCollectorTests(TestCase):
             datetime(2011, 3, 3): 2
         }
         repo = MockDateRepository(date_revs)
-        sc = StatCollector(SimpleStat(), repo,
-                           ['file1'], timedelta(days=30),
-                           end=datetime(2011, 3, 4))
+        sc = RepoStatCollector(SimpleStat(), repo,
+                               ['file1'], timedelta(days=30),
+                               end=datetime(2011, 3, 4))
         stats = sc.get_stats()
         eq_(3, stats.get_date_count())
         eq_(1, stats.get_result(datetime(2011, 1, 1)))
@@ -41,9 +41,9 @@ class StatCollectorTests(TestCase):
     def test_stat_collector_handles_multiple_files(self):
         date_revs = {datetime(2011, 1, 1): 0, datetime(2011, 2, 2): 1}
         repo = MockDateRepository(date_revs)
-        sc = StatCollector(SimpleStat(), repo,
-                           ['file1', 'file2'], timedelta(days=30),
-                           end=datetime(2011, 1, 2))
+        sc = RepoStatCollector(SimpleStat(), repo,
+                               ['file1', 'file2'], timedelta(days=30),
+                               end=datetime(2011, 1, 2))
         stats = sc.get_stats()
         eq_(1, stats.get_date_count())
         eq_(2, stats.get_result(datetime(2011, 1, 1)))
