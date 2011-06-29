@@ -2,9 +2,6 @@ import nose
 from nose.tools import *
 from unittest import TestCase
 
-from shutil import rmtree
-from tempfile import mkdtemp
-from mercurial import commands
 from datetime import datetime, timedelta
 
 from test.repo.mock_date_repository import MockDateRepository
