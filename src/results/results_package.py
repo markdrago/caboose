@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 class ResultsPackage(object):
     def __init__(self):
@@ -10,6 +11,14 @@ class ResultsPackage(object):
 
         self.results[date] = result
     
+    def add_results_from_json(self, jsontxt):
+        jsondata = json.loads(jsontxt)
+        if 'stats' not in jsondata:
+            return
+        for (date, value) in jsondata['stats'].items():
+            dt = self._get_datetime_from_javascript_date(date)
+            self.add_result(dt, value)
+
     def get_result(self, date):
         return self.results[date]
 
@@ -37,4 +46,8 @@ class ResultsPackage(object):
             js_time = int(unixtime) * 1000
             js_results[js_time] = self.results[date]
         return js_results
+
+    def _get_datetime_from_javascript_date(self, js_time):
+        epoch = float(js_time) / 1000
+        return datetime.fromtimestamp(epoch)
 

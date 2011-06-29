@@ -69,3 +69,17 @@ class ResultsPackageTests(TestCase):
         eq_(expected, written)
         rmtree(directory)
 
+    def test_convert_from_js_time_to_datetime(self):
+        jstime = "1300489800000"
+        expected = datetime(2011, 3, 18, 19, 10, 0)
+        eq_(expected, self.rp._get_datetime_from_javascript_date(jstime))
+
+    def test_create_results_package_by_parsing_json(self):
+        inputjson = '{\n  "stats": {\n    "1300489800000": 1234\n  }\n}'
+        self.rp.add_results_from_json(inputjson)
+
+        dates = self.rp.get_dates()
+        eq_(1, len(dates))
+        eq_(datetime(2011, 03, 18, 19, 10, 0), dates[0])
+        eq_(1234, self.rp.get_result(dates[0]))
+
