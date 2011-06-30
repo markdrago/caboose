@@ -7,8 +7,10 @@
 from results.results_package import ResultsPackage
 
 class ResultsStatCollector(object):
-    def __init__(self, stat, results_files):
+    def __init__(self, stat):
         self.stat = stat
+
+    def set_results_files(self, results_files):
         self.results_files = results_files
         self.create_all_results_packages()
 
@@ -28,6 +30,18 @@ class ResultsStatCollector(object):
 
         return rp
 
+    def get_stats(self):
+        rp = ResultsPackage()
+
+        for dt in self.results[0].get_dates():
+            values = [input_rp.get_result(dt) for input_rp in self.results]
+            rp.add_result(dt, self.stat.get_stat(values))
+
+        return rp
+
     def get_results(self):
         return self.results
+
+    def set_results(self, results):
+        self.results = results
 
