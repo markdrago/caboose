@@ -28,7 +28,7 @@ class StatCollectorFactory(object):
 
     def get_results_stat_collector(self, stat, conf):
         stat_collector = self.results_stat_collector_factory.get_results_stat_collector(stat)
-    	files = conf['results_files']
+        files = conf['results_files']
         stat_collector.set_results_files(files)
         return stat_collector
 

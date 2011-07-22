@@ -88,7 +88,7 @@ class StatCollectorFactoryTests(TestCase):
 
     def test_stat_collector_factory_creates_results_stat_collector(self):
         conf = {'stattype': 'results', 'statname': 'mystat',
-        		'results_files': ['file1']}
+                'results_files': ['file1']}
         sc = self.scf.get_stat_collector(conf)
         eq_(MockResultsStatCollector, type(sc))
 
