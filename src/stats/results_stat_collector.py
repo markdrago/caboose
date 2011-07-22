@@ -1,6 +1,6 @@
 #The purpose of this class is to look over the results files that have
-#been created by other statistics and run stats on them.  The purpose for this
-#was originally to gather stats on the # of lines of code in different projects
+#been created by other statistics and run stats on them.  This was originally
+#created to gather stats on the # of lines of code in different projects
 #and then go over those results and produce statistics on the % of code in a
 #given project.
 

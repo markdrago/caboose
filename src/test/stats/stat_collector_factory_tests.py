@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 from stats.stat_collector_factory import StatCollectorFactory
 from stats.stat_collector_factory import StatConfigurationInvalidException
+from stats.results_stat_collector import ResultsStatCollector
 
 class StatCollectorFactoryTests(TestCase):
     def setUp(self):
@@ -15,6 +16,9 @@ class StatCollectorFactoryTests(TestCase):
 
         self.mock_repo_factory = MockRepositoryFactory()
         self.scf.set_repo_factory(self.mock_repo_factory)
+
+        self.mock_results_stat_collector_factory = MockResultsStatCollectorFactory(None)
+        self.scf.set_results_stat_collector_factory(self.mock_results_stat_collector_factory)
 
     def test_stat_collector_factory_raises_exception_for_invalid_config_with_msg(self):
         didthrow = False
@@ -81,7 +85,37 @@ class StatCollectorFactoryTests(TestCase):
         expected = timedelta(seconds = seconds)
         actual = self.scf.get_sample_time_interval_from_config(conf)
         eq_(expected, actual)
+
+    def test_stat_collector_factory_creates_results_stat_collector(self):
+        conf = {'stattype': 'results', 'statname': 'mystat',
+        		'results_files': ['file1']}
+        sc = self.scf.get_stat_collector(conf)
+        eq_(MockResultsStatCollector, type(sc))
+
+    def test_stat_collector_injects_results_file_names_in_to_collector(self):
+        conf = {'stattype': 'results', 'statname': 'mystat',
+                'results_files': ['file1', 'file2']}
+        sc = self.scf.get_stat_collector(conf)
+        rsc = self.mock_results_stat_collector_factory.get_results_stat_collector(None)
+        eq_(['file1', 'file2'], rsc.files)
+
+class MockResultsStatCollectorFactory(object):
+    def __init__(self, stat):
+        self.rsc = MockResultsStatCollector(stat)
     
+    def get_results_stat_collector(self, stat):
+        return self.rsc
+
+class MockResultsStatCollector(object):
+    def __init__(self, stat):
+        self.files = None
+
+    def set_results_files(self, files):
+        self.files = files
+
+    def get_stats(self):
+        pass
+
 class MockRepositoryFactory(object):
     def __init__(self):
         self.last_directory = None
