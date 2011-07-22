@@ -5,3 +5,10 @@ value:
 
 tech debt:
 - grep for TODO
+
+bugs:
+- It may be possible for 2 stats to run far enough apart that when the time
+  offset is used to find an old revision that they'll end up with 2 different
+  revisions.  If these 2 stats are then used in a results_stat the timestamps
+  of their data points will not match and it won't work.  I haven't seen this
+  happen, but I'm pretty sure it would.
