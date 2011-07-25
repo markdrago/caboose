@@ -61,6 +61,13 @@ class FilePackageTests(TestCase):
 
         rmtree(basedir)
 
+    def test_file_package_excludes_excluded_directories(self):
+        fp = FilePackage()
+        fp.add_directory("dir1")
+        fp.add_directories("dir2", "dir3")
+        fp.exclude_directory("dir3")
+        eq_(set(("dir1", "dir2")), set(fp.get_directories()))
+
 class MockFileMatcher(object):
     def match(self):
         return True

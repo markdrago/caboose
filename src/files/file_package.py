@@ -9,6 +9,7 @@ class FilePackageFactory(object):
 class FilePackage(object):
     def __init__(self):
         self.directories = []
+        self.excluded_directories = []
         self.file_matchers = []
         self.basedir = None
     
@@ -28,10 +29,14 @@ class FilePackage(object):
             if stat.S_ISDIR(statinfo[stat.ST_MODE]):
                 self.add_directory(subdir)
 
+    def exclude_directory(self, directory):
+        self.excluded_directories.append(directory)
+
     def get_directories(self):
+        dirs = [d for d in self.directories if d not in self.excluded_directories]
         if self.basedir:
-            return [os.path.join(self.basedir, d) for d in self.directories]
-        return self.directories
+            return [os.path.join(self.basedir, d) for d in dirs]
+        return dirs
 
     def add_file_matcher(self, filematcher):
         self.file_matchers.append(filematcher)
