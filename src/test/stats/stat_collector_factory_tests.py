@@ -70,6 +70,16 @@ class StatCollectorFactoryTests(TestCase):
         fp = self.scf.create_file_package_from_config(conf)
         ok_(self.mock_file_package_factory.get_file_package().add_basedir_subdirs_was_called)
 
+    def test_stat_collector_factory_creates_file_package_with_excluded_dirs(self):
+        basedir = "/home/mdrago/repository_lives_here"
+        conf = {}
+        conf["repodir"] = basedir
+        conf["exclude_dirs"] = ["dir1", "dir2"]
+        fp = self.scf.create_file_package_from_config(conf)
+        expected = set(("dir1", "dir2"))
+        actual = set(self.mock_file_package_factory.get_file_package().excluded_dirs)
+        eq_(expected, actual)
+
     def test_stat_collector_factory_creates_file_iterator(self):
         basedir = "/home/mdrago/repository_lives_here"
         subdir = "TestProject"
@@ -175,6 +185,7 @@ class MockFilePackageFactory(object):
 class MockFilePackage(object):
     def __init__(self):
         self.dirs = []
+        self.excluded_dirs = []
         self.add_basedir_subdirs_was_called = False
 
     def add_directory(self, directory):
@@ -183,6 +194,10 @@ class MockFilePackage(object):
     def add_directories(self, *directories):
         for subdir in directories:
             self.add_directory(subdir)
+
+    def exclude_directories(self, *directories):
+        for subdir in directories:
+            self.excluded_dirs.append(subdir)
 
     def add_file_matcher(self, fm):
         pass

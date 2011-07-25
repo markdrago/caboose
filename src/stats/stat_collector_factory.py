@@ -58,6 +58,9 @@ class StatCollectorFactory(object):
         else:
             fp.add_directories(*conf['dirs'])
 
+        if 'exclude_dirs' in conf:
+            fp.exclude_directories(*conf['exclude_dirs'])
+
         if 'glob' in conf:
             fm = FileMatcherGlob(conf['glob'])
             fp.add_file_matcher(fm)
