@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from stats.stat_collector_factory import StatCollectorFactory
 from stats.stat_collector_factory import StatConfigurationInvalidException
 from stats.results_stat_collector import ResultsStatCollector
+from files.file_package import FilePackageFactory
 
 class StatCollectorFactoryTests(TestCase):
     def setUp(self):
@@ -19,6 +20,9 @@ class StatCollectorFactoryTests(TestCase):
 
         self.mock_results_stat_collector_factory = MockResultsStatCollectorFactory(None)
         self.scf.set_results_stat_collector_factory(self.mock_results_stat_collector_factory)
+
+        self.mock_file_package_factory = MockFilePackageFactory()
+        self.scf.set_file_package_factory(self.mock_file_package_factory)
 
     def test_stat_collector_factory_raises_exception_for_invalid_config_with_msg(self):
         didthrow = False
@@ -49,8 +53,23 @@ class StatCollectorFactoryTests(TestCase):
         conf["repodir"] = basedir
         conf["dirs"] = [ subdir ]
         fp = self.scf.create_file_package_from_config(conf)
-        eq_(set([basedir + '/' + subdir]), set(fp.get_directories()))
-    
+        eq_(subdir, self.mock_file_package_factory.get_file_package().dirs[0])
+
+    def test_stat_collector_factory_creates_file_package_with_subdirs(self):
+        basedir = "/home/mdrago/repository_lives_here"
+        conf = {}
+        conf["repodir"] = basedir
+        conf["dirs"] = '*'
+        fp = self.scf.create_file_package_from_config(conf)
+        ok_(self.mock_file_package_factory.get_file_package().add_basedir_subdirs_was_called)
+
+    def test_stat_collector_factory_creates_file_package_with_subdirs_when_dirs_omitted(self):
+        basedir = "/home/mdrago/repository_lives_here"
+        conf = {}
+        conf["repodir"] = basedir
+        fp = self.scf.create_file_package_from_config(conf)
+        ok_(self.mock_file_package_factory.get_file_package().add_basedir_subdirs_was_called)
+
     def test_stat_collector_factory_creates_file_iterator(self):
         basedir = "/home/mdrago/repository_lives_here"
         subdir = "TestProject"
@@ -61,6 +80,7 @@ class StatCollectorFactoryTests(TestCase):
         eq_(1, len(fi.get_filepackages()))
 
     def test_stat_collector_factory_creates_matcher_glob(self):
+        self.scf.set_file_package_factory(FilePackageFactory)
         glob = "*.java"
         basedir = "/home/mdrago/repository_lives_here"
         subdir = "TestProject"
@@ -144,4 +164,35 @@ class MockStatFactory(object):
 
     def return_non_existant_stat(self):
         self.get_stat_returns_non_existant = True
+
+class MockFilePackageFactory(object):
+    def __init__(self):
+        self.mock = MockFilePackage()
+
+    def get_file_package(self):
+        return self.mock
+
+class MockFilePackage(object):
+    def __init__(self):
+        self.dirs = []
+        self.add_basedir_subdirs_was_called = False
+
+    def add_directory(self, directory):
+        self.dirs.append(directory)
+
+    def add_directories(self, *directories):
+        for subdir in directories:
+            self.add_directory(subdir)
+
+    def add_file_matcher(self, fm):
+        pass
+
+    def set_basedir(self, basedir):
+        pass
+
+    def file_matchers(self):
+        pass
+
+    def add_basedir_subdirectories(self):
+        self.add_basedir_subdirs_was_called = True
 

@@ -4,7 +4,7 @@ from stat_factory import StatFactory
 from repo_stat_collector import RepoStatCollector
 from results_stat_collector import ResultsStatCollector
 from repo.repository_factory import RepositoryFactory
-from files.file_package import FilePackage
+from files.file_package import FilePackageFactory
 from files.file_iterator import FileIterator
 from files.file_matcher_glob import FileMatcherGlob
 from results.results_package import ResultsPackage
@@ -13,6 +13,7 @@ class StatCollectorFactory(object):
     def __init__(self):
         self.set_stat_factory(StatFactory())
         self.set_repo_factory(RepositoryFactory)
+        self.set_file_package_factory(FilePackageFactory)
         self.set_current_time(datetime.now())
         self.set_results_stat_collector_factory(ResultsStatCollectorFactory())
 
@@ -50,9 +51,12 @@ class StatCollectorFactory(object):
         return FileIterator([self.create_file_package_from_config(conf)])
 
     def create_file_package_from_config(self, conf):
-        fp = FilePackage()
+        fp = self.file_package_factory.get_file_package()
         fp.set_basedir(conf['repodir'])
-        fp.add_directories(*conf['dirs'])
+        if 'dirs' not in conf or conf['dirs'] == '*':
+            fp.add_basedir_subdirectories()
+        else:
+            fp.add_directories(*conf['dirs'])
 
         if 'glob' in conf:
             fm = FileMatcherGlob(conf['glob'])
@@ -78,6 +82,9 @@ class StatCollectorFactory(object):
 
     def set_results_stat_collector_factory(self, factory):
         self.results_stat_collector_factory = factory
+
+    def set_file_package_factory(self, factory):
+        self.file_package_factory = factory
 
 class ResultsStatCollectorFactory(object):
     def get_results_stat_collector(self, stat):

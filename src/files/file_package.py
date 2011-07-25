@@ -1,6 +1,11 @@
 import os
 import stat
 
+class FilePackageFactory(object):
+    @classmethod
+    def get_file_package(clazz):
+        return FilePackage()
+
 class FilePackage(object):
     def __init__(self):
         self.directories = []
@@ -16,7 +21,7 @@ class FilePackage(object):
     def add_directories(self, *args):
         for directory in args:
             self.add_directory(directory)
-    
+
     def add_basedir_subdirectories(self):
         for subdir in os.listdir(self.basedir):
             statinfo = os.stat(os.path.join(self.basedir, subdir))
