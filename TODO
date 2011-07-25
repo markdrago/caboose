@@ -1,14 +1,15 @@
 value:
-- make % of code in a given subset of dirs stat work w/ config
-  X perhaps add ability to have a stat which is not written to index
-  - then have a stat which reads from already-written results files
+- incorporate a black-list of directories to exclude globally
+- figure out how to get >1 plot on one graph in a sane way
 
 tech debt:
 - grep for TODO
 
 bugs:
-- It may be possible for 2 stats to run far enough apart that when the time
-  offset is used to find an old revision that they'll end up with 2 different
-  revisions.  If these 2 stats are then used in a results_stat the timestamps
-  of their data points will not match and it won't work.  I haven't seen this
-  happen, but I'm pretty sure it would.
+- It may be possible for 2 stats to run far enough apart (at run-time) that
+  when the time offset is used to find an old revision they'll end up with 2
+  different revisions.  If these 2 stats are then used in a results_stat the
+  timestamps of their data points will not match and it won't work.  I haven't
+  seen this happen, but I'm pretty sure it would.  The fix I'm imagining would
+  be to save a 'starting time' at the beginning of execution and have every
+  stat use that as its starting time.
