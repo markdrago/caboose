@@ -31,6 +31,10 @@ class FilePackage(object):
 
     def exclude_directory(self, directory):
         self.excluded_directories.append(directory)
+    
+    def exclude_directories(self, *args):
+        for directory in args:
+            self.exclude_directory(directory)
 
     def get_directories(self):
         dirs = [d for d in self.directories if d not in self.excluded_directories]

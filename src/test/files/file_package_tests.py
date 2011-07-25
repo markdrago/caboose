@@ -64,8 +64,9 @@ class FilePackageTests(TestCase):
     def test_file_package_excludes_excluded_directories(self):
         fp = FilePackage()
         fp.add_directory("dir1")
-        fp.add_directories("dir2", "dir3")
+        fp.add_directories("dir2", "dir3", "dir4", "dir5")
         fp.exclude_directory("dir3")
+        fp.exclude_directories("dir4", "dir5")
         eq_(set(("dir1", "dir2")), set(fp.get_directories()))
 
 class MockFileMatcher(object):
