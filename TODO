@@ -7,11 +7,3 @@ tech debt:
 - grep for TODO
 - make output_directory global option work like other globals (distributable)
 
-bugs:
-- It may be possible for 2 stats to run far enough apart (at run-time) that
-  when the time offset is used to find an old revision they'll end up with 2
-  different revisions.  If these 2 stats are then used in a results_stat the
-  timestamps of their data points will not match and it won't work.  I haven't
-  seen this happen, but I'm pretty sure it would.  The fix I'm imagining would
-  be to save a 'starting time' at the beginning of execution and have every
-  stat use that as its starting time.
