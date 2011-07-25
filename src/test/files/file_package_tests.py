@@ -39,6 +39,28 @@ class FilePackageTests(TestCase):
         expected = set(("/tmp/basedirname/dir1", "/tmp/basedirname/dir2"))
         eq_(expected, set(fp.get_directories()))
 
+    def test_file_package_add_basedir_subdirs(self):
+        basedir = mkdtemp('-caboose-file-iterator-tests')
+
+        expected_dirs = set()
+        for subdir in ("dir1", "dir2", "dir3"):
+            newdir = os.path.join(basedir, subdir)
+            os.mkdir(newdir)
+            expected_dirs.add(newdir)
+
+        #add a file which should be ignored as it is not a directory
+        filepath = os.path.join(basedir, "file1")
+        with open(filepath, 'w') as f:
+            f.write("file contents here")
+
+        fp = FilePackage()
+        fp.set_basedir(basedir)
+        fp.add_basedir_subdirectories()
+
+        eq_(expected_dirs, set(fp.get_directories()))
+
+        rmtree(basedir)
+
 class MockFileMatcher(object):
     def match(self):
         return True
