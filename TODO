@@ -1,5 +1,4 @@
 value:
-- incorporate a black-list of directories to exclude globally
 - figure out how to get >1 plot on one graph in a sane way
 - create output directory if it does not exist
 - add ability to move more config options up to global level
