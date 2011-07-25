@@ -52,3 +52,47 @@ class ConfigParserTests(TestCase):
         eq_(604800, conf['stats'][0]['datapoint_time_delta'])
         eq_('shared_ncss.json', conf['stats'][0]['outfile'])
 
+    def test_parse_config_copies_select_options_to_stat_level(self):
+        json = """{
+            "output_directory": "/path/to/outputdir",
+            "repodir": "/path/to/code/codedir",
+            "dirs": ["CodeDirectory"],
+            "glob": "*.java",
+            "start_time_delta": 2592000,
+            "datapoint_time_delta": 604800,
+            "stats": [
+                {
+                    "description": "# of blahblah in blah",
+                    "statname": "java_ncss",
+                    "outfile": "shared_ncss.json"
+                }
+            ]
+        }"""
+
+        conf = self.cp.parse_text(json)
+
+        eq_('/path/to/code/codedir', conf['stats'][0]['repodir'])
+        eq_('CodeDirectory', conf['stats'][0]['dirs'][0])
+        eq_('*.java', conf['stats'][0]['glob'])
+        eq_(2592000, conf['stats'][0]['start_time_delta'])
+        eq_(604800, conf['stats'][0]['datapoint_time_delta'])
+
+    def test_parse_config_does_not_copy_over_stat_option(self):
+        json = """{
+            "output_directory": "/path/to/outputdir",
+            "repodir": "/path/to/code/codedir",
+            "glob": "*.java",
+            "stats": [
+                {
+                    "description": "# of blahblah in blah",
+                    "glob": "*.py",
+                    "statname": "java_ncss",
+                    "outfile": "shared_ncss.json"
+                }
+            ]
+        }"""
+
+        conf = self.cp.parse_text(json)
+
+        eq_('*.py', conf['stats'][0]['glob'])
+

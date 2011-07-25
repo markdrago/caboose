@@ -1,9 +1,12 @@
 value:
 - incorporate a black-list of directories to exclude globally
 - figure out how to get >1 plot on one graph in a sane way
+- create output directory if it does not exist
+- add ability to move more config options up to global level
 
 tech debt:
 - grep for TODO
+- make output_directory global option work like other globals (distributable)
 
 bugs:
 - It may be possible for 2 stats to run far enough apart (at run-time) that
