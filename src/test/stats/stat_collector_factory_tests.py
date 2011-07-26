@@ -30,7 +30,7 @@ class StatCollectorFactoryTests(TestCase):
             self.scf.get_stat_collector({})
         except StatConfigurationInvalidException as e:
             didthrow = True
-            eq_("Unable to find required configuration option", str(e))
+            ok_(str(e).startswith("Unable to find required configuration option"))
         ok_(didthrow)
 
     def test_stat_collector_factory_creates_proper_stat(self):

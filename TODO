@@ -1,9 +1,14 @@
 value:
 - figure out how to get >1 plot on one graph in a sane way
 - create output directory if it does not exist
-- add ability to move more config options up to global level
+- make results_files config option relative to output directory
+- add results stat which will sum the results of two other stats
+- add ability to not look within test directories
 
 tech debt:
 - grep for TODO
 - make output_directory global option work like other globals (distributable)
+  - possibly move global stat options in to an element (global_stat...)
 
+bugs:
+- ccn_func_limit stats not finishing?  0% cpu & disk?

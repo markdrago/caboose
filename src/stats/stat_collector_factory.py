@@ -24,8 +24,8 @@ class StatCollectorFactory(object):
                 return self.get_results_stat_collector(stat, conf)
             else:
                 return self.get_repo_stat_collector(stat, conf)
-        except KeyError:
-            raise StatConfigurationInvalidException("Unable to find required configuration option")
+        except KeyError as e:
+            raise StatConfigurationInvalidException("Unable to find required configuration option: %s" % str(e))
 
     def get_results_stat_collector(self, stat, conf):
         stat_collector = self.results_stat_collector_factory.get_results_stat_collector(stat)
@@ -93,6 +93,6 @@ class ResultsStatCollectorFactory(object):
     def get_results_stat_collector(self, stat):
         return ResultsStatCollector(stat)
 
-class StatConfigurationInvalidException(BaseException):
+class StatConfigurationInvalidException(Exception):
     pass
 

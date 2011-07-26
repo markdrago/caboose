@@ -59,7 +59,8 @@ class ConfigParserTests(TestCase):
             "dirs": ["CodeDirectory"],
             "glob": "*.java",
             "start_time_delta": 2592000,
-            "datapoint_time_delta": 604800,
+            "sample_time_interval": 604800,
+            "exclude_dirs": ["ExcludeMe"],
             "stats": [
                 {
                     "description": "# of blahblah in blah",
@@ -75,7 +76,8 @@ class ConfigParserTests(TestCase):
         eq_('CodeDirectory', conf['stats'][0]['dirs'][0])
         eq_('*.java', conf['stats'][0]['glob'])
         eq_(2592000, conf['stats'][0]['start_time_delta'])
-        eq_(604800, conf['stats'][0]['datapoint_time_delta'])
+        eq_(604800, conf['stats'][0]['sample_time_interval'])
+        eq_("ExcludeMe", conf['stats'][0]['exclude_dirs'][0])
 
     def test_parse_config_does_not_copy_over_stat_option(self):
         json = """{

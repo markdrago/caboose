@@ -5,7 +5,8 @@ distributable = (
     'dirs',
     'glob',
     'start_time_delta',
-    'datapoint_time_delta'
+    'sample_time_interval',
+    'exclude_dirs'
 )
 
 class ConfigParser(object):
