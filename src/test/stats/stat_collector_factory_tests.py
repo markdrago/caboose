@@ -23,6 +23,9 @@ class StatCollectorFactoryTests(TestCase):
 
         self.mock_file_package_factory = MockFilePackageFactory()
         self.scf.set_file_package_factory(self.mock_file_package_factory)
+        
+        self.mock_file_iterator_factory = MockFileIteratorFactory()
+        self.scf.set_file_iterator_factory(self.mock_file_iterator_factory)
 
     def test_stat_collector_factory_raises_exception_for_invalid_config_with_msg(self):
         didthrow = False
@@ -79,7 +82,7 @@ class StatCollectorFactoryTests(TestCase):
         expected = set(("dir1", "dir2"))
         actual = set(self.mock_file_package_factory.get_file_package().excluded_dirs)
         eq_(expected, actual)
-
+        
     def test_stat_collector_factory_creates_file_iterator(self):
         basedir = "/home/mdrago/repository_lives_here"
         subdir = "TestProject"
@@ -88,6 +91,15 @@ class StatCollectorFactoryTests(TestCase):
         conf["dirs"] = [ subdir ]
         fi = self.scf.create_file_iterator_from_config(conf)
         eq_(1, len(fi.get_filepackages()))
+
+    def test_stat_collector_factory_creates_file_iterator_with_excluded_path_globs(self):
+        basedir = "/home/mdrago/repository_lives_here"
+        conf = {}
+        conf["repodir"] = basedir
+        conf["exclude_path_globs"] = ["*/test/*"]
+        fp = self.scf.create_file_iterator_from_config(conf)
+        actual = set(self.mock_file_iterator_factory.get_file_iterator().excluded_path_globs)
+        eq_(set(["*/test/*"]), actual)
 
     def test_stat_collector_factory_creates_matcher_glob(self):
         self.scf.set_file_package_factory(FilePackageFactory)
@@ -196,8 +208,8 @@ class MockFilePackage(object):
             self.add_directory(subdir)
 
     def exclude_directories(self, *directories):
-        for subdir in directories:
-            self.excluded_dirs.append(subdir)
+        for directory in directories:
+            self.excluded_dirs.append(directory)
 
     def add_file_matcher(self, fm):
         pass
@@ -210,4 +222,27 @@ class MockFilePackage(object):
 
     def add_basedir_subdirectories(self):
         self.add_basedir_subdirs_was_called = True
+
+class MockFileIteratorFactory(object):
+    def __init__(self):
+        self.file_iterator = MockFileIterator()
+    
+    def get_file_iterator(self, filepackages=None):
+        self.file_iterator.set_filepackages(filepackages)
+        return self.file_iterator
+
+class MockFileIterator(object):
+    def __init__(self, filepackages=None):
+        self.file_packages = []
+        self.excluded_path_globs = []
+
+    def exclude_path_globs(self, *globs):
+        for glob in globs:
+            self.excluded_path_globs.append(glob)
+
+    def get_filepackages(self):
+        return self.filepackages
+
+    def set_filepackages(self, filepackages):
+        self.filepackages = filepackages
 

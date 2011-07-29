@@ -5,7 +5,7 @@ from repo_stat_collector import RepoStatCollector
 from results_stat_collector import ResultsStatCollector
 from repo.repository_factory import RepositoryFactory
 from files.file_package import FilePackageFactory
-from files.file_iterator import FileIterator
+from files.file_iterator import FileIteratorFactory
 from files.file_matcher_glob import FileMatcherGlob
 from results.results_package import ResultsPackage
 
@@ -14,6 +14,7 @@ class StatCollectorFactory(object):
         self.set_stat_factory(StatFactory())
         self.set_repo_factory(RepositoryFactory)
         self.set_file_package_factory(FilePackageFactory)
+        self.set_file_iterator_factory(FileIteratorFactory)
         self.set_current_time(datetime.now())
         self.set_results_stat_collector_factory(ResultsStatCollectorFactory())
 
@@ -48,7 +49,13 @@ class StatCollectorFactory(object):
         return self.repo_factory.get_repository(conf['repodir'])
 
     def create_file_iterator_from_config(self, conf):
-        return FileIterator([self.create_file_package_from_config(conf)])
+        fp = self.create_file_package_from_config(conf)
+        fi = self.file_iterator_factory.get_file_iterator([fp])
+
+        if 'exclude_path_globs' in conf:
+            fi.exclude_path_globs(*conf['exclude_path_globs'])
+
+        return fi
 
     def create_file_package_from_config(self, conf):
         fp = self.file_package_factory.get_file_package()
@@ -64,7 +71,7 @@ class StatCollectorFactory(object):
         if 'glob' in conf:
             fm = FileMatcherGlob(conf['glob'])
             fp.add_file_matcher(fm)
-
+        
         return fp
 
     def get_start_time_from_config(self, conf):
@@ -88,6 +95,9 @@ class StatCollectorFactory(object):
 
     def set_file_package_factory(self, factory):
         self.file_package_factory = factory
+    
+    def set_file_iterator_factory(self, factory):
+        self.file_iterator_factory = factory
 
 class ResultsStatCollectorFactory(object):
     def get_results_stat_collector(self, stat):

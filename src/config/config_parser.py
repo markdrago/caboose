@@ -6,7 +6,8 @@ distributable = (
     'glob',
     'start_time_delta',
     'sample_time_interval',
-    'exclude_dirs'
+    'exclude_dirs',
+    'exclude_path_globs'
 )
 
 class ConfigParser(object):

@@ -4,6 +4,7 @@ from unittest import TestCase
 import os
 from shutil import rmtree
 from tempfile import mkdtemp
+from fnmatch import fnmatch
 
 from files.file_matcher_glob import FileMatcherGlob
 

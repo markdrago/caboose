@@ -3,7 +3,6 @@ value:
 - create output directory if it does not exist
 - make results_files config option relative to output directory
 - add results stat which will sum the results of two other stats
-- add ability to not look within test directories
 
 tech debt:
 - grep for TODO

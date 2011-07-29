@@ -123,6 +123,17 @@ class FileIteratorTests(TestCase):
         eq_(1, len(self.file_iterator.files()))
         eq_(os.path.join(self.directory, 'exists.txt'), self.file_iterator.files()[0])
 
+    def test_file_iterator_excludes_excluded_path_globs(self):
+        srcdir = self._create_dir(self.directory, 'src')
+        self._create_file(srcdir, 'srcfile.java')
+        testdir = self._create_dir(self.directory, 'test')
+        self._create_file(testdir, 'testfile.java')
+
+        self.file_iterator.exclude_path_globs(*["*/test/*"])
+
+        eq_(1, len(self.file_iterator.files()))
+        eq_(os.path.join(srcdir, 'srcfile.java'), self.file_iterator.files()[0])
+
     @nottest
     def _create_file(self, directory, filename):
         filepath = os.path.join(directory, filename)
