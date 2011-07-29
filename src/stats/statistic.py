@@ -14,9 +14,8 @@ class Statistic(object):
     #TODO: move to some utils class
     def get_result_from_shell(self, cmd):
         p = Popen(cmd, shell=True, stdout=PIPE)
-        p.wait()
-        output = p.stdout.read()
-        return output
+        (stdout_data, stderr_data) = p.communicate()
+        return stdout_data
 
     #TODO: move to some utils class
     def write_filenames_to_temp_file(self):

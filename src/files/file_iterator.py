@@ -22,5 +22,5 @@ class FileIterator(object):
                     for filematcher in filepackage.get_file_matchers():
                         files = filter(lambda f: filematcher.match(f), files)
                     filelist += [os.path.join(root, f) for f in files]
-        return filelist
+        return filter(lambda x: os.path.exists(x), filelist)
 

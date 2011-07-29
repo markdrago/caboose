@@ -113,6 +113,16 @@ class FileIteratorTests(TestCase):
             need_to_find.remove(f)
         eq_(0, len(need_to_find))
 
+    def test_file_iterator_excludes_broken_symlinks(self):
+        files = ['exists.txt', 'movealong.txt']
+
+        self._create_file(self.directory, 'exists.txt')
+        os.symlink(os.path.join(self.directory, 'movealong.txt'),
+                   os.path.join(self.directory, 'broken.txt'))
+
+        eq_(1, len(self.file_iterator.files()))
+        eq_(os.path.join(self.directory, 'exists.txt'), self.file_iterator.files()[0])
+
     @nottest
     def _create_file(self, directory, filename):
         filepath = os.path.join(directory, filename)
