@@ -13,9 +13,11 @@ from repo.mercurial_repository import MercurialRepository
 class MercurialRepositoryTests(TestCase):
     def setUp(self):
         self.directory = mkdtemp('-caboose-hg-repo-tests')
+        self.rmtree = True
     
     def tearDown(self):
-        rmtree(self.directory)
+        if self.rmtree:
+            rmtree(self.directory)
 
     @raises(Exception)
     def test_init_raises_with_init_false_and_non_hg_directory(self):
@@ -85,6 +87,26 @@ class MercurialRepositoryTests(TestCase):
     def test_repo_uses_quiet_ui(self):
         hgrepo = MercurialRepository(self.directory, init=True)
         eq_(True, hgrepo.ui.quiet)
+
+    def test_commit_with_date_after_its_parent_is_not_bogus(self):
+        hgrepo = MercurialRepository(self.directory, init=True)
+        dates = ('2011-04-01 04:04:04', '2011-04-15 04:04:04', '2011-05-01 05:05:05')
+        self.create_test_changesets(hgrepo, 3, dates=dates)
+        good_ctx = hgrepo.repo['e0df3e028f17c92d69acb24354066a45d43e18e3']
+        eq_(False, hgrepo.changeset_is_bogus(good_ctx), "changeset should not be bogus")
+
+    def test_commit_with_date_before_its_parent_is_bogus(self):
+        hgrepo = MercurialRepository(self.directory, init=True)
+        dates = ('2011-04-01 04:04:04', '2011-05-01 05:05:05', '2011-04-15 04:04:04')
+        self.create_test_changesets(hgrepo, 3, dates=dates)
+        bogus_ctx = hgrepo.repo['53fc3ea1c9a868a62a300f62a2fc801430fb3333']
+        ok_(hgrepo.changeset_is_bogus(bogus_ctx), "changeset should be bogus")
+
+    def test_repo_avoids_commit_with_date_before_its_parent(self):
+        hgrepo = MercurialRepository(self.directory, init=True)
+        dates = ('2011-04-01 04:04:04', '2011-05-01 05:05:05', '2011-04-15 04:04:04')
+        self.create_test_changesets(hgrepo, 3, dates=dates)
+        eq_('e38050495d876318cccb1cde5fb5e0166a5c4c46', hgrepo.get_revision_before_date(datetime(2011, 4, 18, 4, 4, 4)))
 
     @nottest
     def create_test_changesets(self, repo, count=1, dates=[]):
