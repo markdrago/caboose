@@ -83,3 +83,11 @@ class ResultsPackageTests(TestCase):
         eq_(datetime(2011, 03, 18, 19, 10, 0), dates[0])
         eq_(1234, self.rp.get_result(dates[0]))
 
+    def test_results_package_writes_out_description(self):
+        desc = "description goes here"
+        self.rp.set_description(desc)
+        dt = datetime(2011, 03, 18, 19, 10, 0)
+        self.rp.add_result(dt, 1234)
+        expected='{\n  "stats": {\n    "1300489800000": 1234\n  }, \n  "description": "description goes here"\n}'
+        eq_(expected, self.rp.get_json())
+

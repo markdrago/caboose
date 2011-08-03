@@ -1,5 +1,6 @@
 value:
 - figure out how to get >1 plot on one graph in a sane way
+  - possibly by having a results stat which combines the stats
 - create output directory if it does not exist
 - make results_files config option relative to output directory
 - add results stat which will sum the results of two other stats

@@ -4,6 +4,7 @@ from datetime import datetime
 class ResultsPackage(object):
     def __init__(self):
         self.results = {}
+        self.description = None
     
     def add_result(self, date, result):
         if date not in self.results:
@@ -28,6 +29,8 @@ class ResultsPackage(object):
     def get_json(self):
         json_results = self._get_results_with_javascript_dates()
         complete = { "stats" : json_results }
+        if self.description is not None:
+            complete['description'] = self.description
         return json.dumps(complete, indent=2)
 
     def write_json_results(self, outfile):
@@ -37,6 +40,9 @@ class ResultsPackage(object):
 
     def get_dates(self):
         return self.results.keys()
+
+    def set_description(self, description):
+        self.description = description
 
     def _get_results_with_javascript_dates(self):
         #convert datetime keys in to javascript time (ms since epoch)

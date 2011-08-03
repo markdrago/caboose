@@ -12,7 +12,11 @@ class StatRunner(object):
         outfile = self.get_outfile_location()
 
         results = stat_collector.get_stats()
+        results.set_description(self.get_description())
         results.write_json_results(outfile)
+
+        if self.include_in_results_index():
+            self.results_index.add_result(self.get_description(), outfile)
 
     def set_conf(self, conf={}):
         self.conf = conf
@@ -31,6 +35,9 @@ class StatRunner(object):
 
     def get_description(self):
         return self.conf['description']
+
+    def set_results_index(self, results_index):
+        self.results_index = results_index
 
     def include_in_results_index(self):
         key = 'include_in_results_index'
