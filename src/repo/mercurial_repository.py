@@ -75,15 +75,18 @@ class MercurialRepository(object):
         else:
             return self.changeset_is_bogus_due_to_commit_date_history(parent, depth-1)
 
+    #this tries to stay on the same branch, but if there is a fast-forward
+    #merge in the repo somewhere it will just return the single parent that
+    #is on a different branch
     def get_parent_chgset_on_same_branch(self, chgset):
         branch = chgset.branch()
         parents = chgset.parents()
         if len(parents) == 0:
             return None
-        if parents[0].branch() == branch:
-            return parents[0]
         if len(parents) > 1 and parents[1].branch() == branch:
             return parents[1]
+        return parents[0]
+
 
     def parent_and_child_dates_are_too_far_in_wrong_direction(self, parent, child):
         pdate = self.datetime_from_hg_date(parent.date())
