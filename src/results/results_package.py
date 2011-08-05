@@ -5,6 +5,7 @@ class ResultsPackage(object):
     def __init__(self):
         self.results = {}
         self.description = None
+        self.datatype = None
     
     def add_result(self, date, result):
         if date not in self.results:
@@ -31,6 +32,8 @@ class ResultsPackage(object):
         complete = { "stats" : json_results }
         if self.description is not None:
             complete['description'] = self.description
+        if self.datatype is not None:
+            complete['datatype'] = self.datatype
         return json.dumps(complete, indent=2)
 
     def write_json_results(self, outfile):
@@ -43,6 +46,9 @@ class ResultsPackage(object):
 
     def set_description(self, description):
         self.description = description
+
+    def set_datatype(self, datatype):
+        self.datatype = datatype
 
     def _get_results_with_javascript_dates(self):
         #convert datetime keys in to javascript time (ms since epoch)

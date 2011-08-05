@@ -77,6 +77,14 @@ class StatRunnerTests(TestCase):
 
         eq_('desc goes here', self.stat_collector_factory.scs[0].results_package.description)
 
+    def test_sets_datatype_in_results_package(self):
+        statconf = { 'statname': 'stat1', 'outfile': 'outfilename', 'description': 'desc goes here', 'datatype': 'percentage' }
+        self.stat_runner.set_output_directory('/tmp/notused')
+        self.stat_runner.set_conf(statconf)
+        self.stat_runner.run()
+
+        eq_('percentage', self.stat_collector_factory.scs[0].results_package.datatype)
+
 class MockResultsIndex(object):
     def __init__(self):
         self.filename = None
@@ -90,9 +98,13 @@ class MockResultsPackage(object):
     def __init__(self):
         self.outfile_requested = None
         self.description = None
+        self.datatype = None
 
     def set_description(self, desc):
         self.description = desc
+
+    def set_datatype(self, datatype):
+        self.datatype = datatype
 
     def write_json_results(self, outfile):
         self.outfile_requested = outfile

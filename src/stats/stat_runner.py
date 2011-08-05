@@ -12,9 +12,12 @@ class StatRunner(object):
         outfile = self.get_outfile_location()
 
         results = stat_collector.get_stats()
-        results.set_description(self.get_description())
-        results.write_json_results(outfile)
 
+        results.set_description(self.get_description())
+        if self.conf_has_datatype():
+            results.set_datatype(self.get_datatype())
+
+        results.write_json_results(outfile)
         if self.include_in_results_index():
             self.results_index.add_result(self.get_description(), outfile)
 
@@ -35,6 +38,12 @@ class StatRunner(object):
 
     def get_description(self):
         return self.conf['description']
+
+    def get_datatype(self):
+        return self.conf['datatype']
+
+    def conf_has_datatype(self):
+        return 'datatype' in self.conf
 
     def set_results_index(self, results_index):
         self.results_index = results_index

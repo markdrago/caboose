@@ -91,3 +91,11 @@ class ResultsPackageTests(TestCase):
         expected='{\n  "stats": {\n    "1300489800000": 1234\n  }, \n  "description": "description goes here"\n}'
         eq_(expected, self.rp.get_json())
 
+    def test_results_package_writes_out_datatype(self):
+        datatype = "percentage"
+        self.rp.set_datatype(datatype)
+        dt = datetime(2011, 03, 18, 19, 10, 0)
+        self.rp.add_result(dt, 1234)
+        expected='{\n  "datatype": "percentage", \n  "stats": {\n    "1300489800000": 1234\n  }\n}'
+        eq_(expected, self.rp.get_json())
+
