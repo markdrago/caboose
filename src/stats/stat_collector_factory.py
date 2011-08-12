@@ -40,7 +40,7 @@ class StatCollectorFactory(object):
         start_time = self.get_start_time_from_config(conf)
         sample_interval = self.get_sample_time_interval_from_config(conf)
 
-        return RepoStatCollector(stat, repo, files, sample_interval, start_time)
+        return RepoStatCollector(stat, repo, files, sample_interval, start_time, self.current_time)
 
     def create_stat_from_config(self, conf):
         return self.stat_factory.get_stat(conf['statname'], conf)

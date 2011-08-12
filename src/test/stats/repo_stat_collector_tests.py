@@ -13,7 +13,7 @@ class RepoStatCollectorTests(TestCase):
         repo = MockDateRepository(date_revs)
 
         sc = RepoStatCollector(SimpleStat(), repo,
-                               ['file1'], timedelta(days=30),
+                               ['file1'], timedelta(days=30), start=None,
                                end=datetime(2011, 1, 2))
         stats = sc.get_stats()
         eq_(1, stats.get_date_count())
@@ -28,6 +28,7 @@ class RepoStatCollectorTests(TestCase):
         repo = MockDateRepository(date_revs)
         sc = RepoStatCollector(SimpleStat(), repo,
                                ['file1'], timedelta(days=30),
+                               start=None,
                                end=datetime(2011, 3, 4))
         stats = sc.get_stats()
         eq_(3, stats.get_date_count())
@@ -40,6 +41,7 @@ class RepoStatCollectorTests(TestCase):
         repo = MockDateRepository(date_revs)
         sc = RepoStatCollector(SimpleStat(), repo,
                                ['file1', 'file2'], timedelta(days=30),
+                               start=None,
                                end=datetime(2011, 1, 2))
         stats = sc.get_stats()
         eq_(1, stats.get_date_count())

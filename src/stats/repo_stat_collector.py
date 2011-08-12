@@ -6,8 +6,7 @@ from repo.repository_iterator import RepositoryIterator
 from results.results_package import ResultsPackage
 
 class RepoStatCollector(object):
-    def __init__(self, stat, repo, files, delta, start=None,
-                 end=datetime.now()):
+    def __init__(self, stat, repo, files, delta, start, end):
         self.repo = repo
         self.timedelta = delta
         self.files = files
