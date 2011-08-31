@@ -22,3 +22,34 @@ class FilePreProcessJsSubsetTests(TestCase):
         self.jspp.set_full_file_contents(text)
         eq_("javascript here\n", self.jspp.get_js_subset())
 
+    def test_capitalized_tags(self):
+        text = "before\n"
+        text += "<SCRIPT>\n"
+        text += "javascript here\n"
+        text += "</SCRIPT>\n"
+        text += "after\n"
+        self.jspp.set_full_file_contents(text)
+        eq_("javascript here\n", self.jspp.get_js_subset())
+
+    def test_extra_attributes_in_script_tag(self):
+        text = "before\n"
+        text += "<script type=\"text/javascript\">\n"
+        text += "javascript here\n"
+        text += "</script>\n"
+        text += "after\n"
+        self.jspp.set_full_file_contents(text)
+        eq_("javascript here\n", self.jspp.get_js_subset())
+
+    def test_multiple_javascript_blocks(self):
+        text = "before\n"
+        text += "<script>\n"
+        text += "javascript here\n"
+        text += "</script>\n"
+        text += "middle\n"
+        text += "<script>\n"
+        text += "more js here\n"
+        text += "</script>\n"
+        text += "after\n"
+        self.jspp.set_full_file_contents(text)
+        eq_("javascript here\nmore js here\n", self.jspp.get_js_subset())
+

@@ -9,10 +9,10 @@ class FilePreProcessJsSubset(object):
         result = ""
         in_tags = False
         for line in self.full_file_contents.split("\n"):
-            if "<script" in line:
+            if "<script" in line.lower():
                 in_tags = True
                 continue
-            if "</script" in line:
+            if "</script" in line.lower():
                 in_tags = False
                 continue
             if in_tags:
