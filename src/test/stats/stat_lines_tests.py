@@ -88,7 +88,24 @@ class StatLinesTests(TestCase):
 
     def test_stat_has_right_name(self):
         eq_(StatLines.get_name(), "lines")
-    
+
+    def test_use_preprocessor_when_requested(self):
+        directory = mkdtemp("-caboose-numlines-single-test")
+        self._create_file_with_n_lines(directory, 2)
+
+        fp = FilePackage()
+        fp.add_directory(directory)
+        file_iterator = FileIterator([fp])
+
+        ppf = MockPreProcessorFactory()
+        stat = StatLines()
+        stat.set_preprocessor_factory(ppf)
+        stat.set_files(file_iterator.files())
+        stat.get_stat()
+        ok_(ppf.get_preprocessor_called)
+        ok_(ppf.preprocessor.get_output_called)
+        rmtree(directory)
+
     @nottest
     def _create_file_with_n_lines(self, directory, count, suffix='.java'):
         filename = path.join(directory, "%s%s" % (str(uuid4()), suffix))
@@ -96,4 +113,25 @@ class StatLinesTests(TestCase):
             for i in range(1, count+1):
                 f.write("line %d\n" % i)
             f.close()
+
+class MockPreProcessorFactory(object):
+    def __init__(self):
+        self.get_preprocessor_called = False
+        self.preprocessor = MockPreProcessor()
+
+    def get_preprocessor(self, name):
+        self.get_preprocessor_called = True
+        return self.preprocessor
+
+class MockPreProcessor(object):
+    def __init__(self):
+        self.get_output_called = False
+        self.input = None
+
+    def set_input(self, incoming):
+        self.input = incoming
+    
+    def get_output(self):
+        self.get_output_called = True
+        return self.input
 
