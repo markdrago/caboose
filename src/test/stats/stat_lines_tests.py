@@ -99,10 +99,12 @@ class StatLinesTests(TestCase):
 
         ppf = MockPreProcessorFactory()
         stat = StatLines()
+        stat.set_config({'preprocessor': 'name_here'})
         stat.set_preprocessor_factory(ppf)
         stat.set_files(file_iterator.files())
         stat.get_stat()
         ok_(ppf.get_preprocessor_called)
+        eq_(ppf.preprocessor_name_requested, 'name_here')
         ok_(ppf.preprocessor.get_output_called)
         rmtree(directory)
 
@@ -117,10 +119,12 @@ class StatLinesTests(TestCase):
 class MockPreProcessorFactory(object):
     def __init__(self):
         self.get_preprocessor_called = False
+        self.preprocessor_name_requested = ""
         self.preprocessor = MockPreProcessor()
 
     def get_preprocessor(self, name):
         self.get_preprocessor_called = True
+        self.preprocessor_name_requested = name
         return self.preprocessor
 
 class MockPreProcessor(object):

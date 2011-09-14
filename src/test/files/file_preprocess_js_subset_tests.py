@@ -53,3 +53,14 @@ class FilePreProcessJsSubsetTests(TestCase):
         self.jspp.set_input(text)
         eq_("javascript here\nmore js here\n", self.jspp.get_output())
 
+    def test_open_and_close_on_one_line(self):
+        text = "before\n"
+        text += "<script type=\"text/javascript\" src=\"blah.js\"></script>\n"
+        text += "middle\n"
+        text += "<script>\n"
+        text += "more js here\n"
+        text += "</script>\n"
+        text += "after\n"
+        self.jspp.set_input(text)
+        eq_("more js here\n", self.jspp.get_output())
+

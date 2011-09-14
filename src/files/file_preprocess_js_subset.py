@@ -2,6 +2,10 @@ class FilePreProcessJsSubset(object):
     def __init__(self):
         self.full_file_contents = ""
 
+    @classmethod
+    def get_name(clazz):
+        return 'js_subset'
+
     def set_input(self, contents):
         self.full_file_contents = contents
     
@@ -9,10 +13,11 @@ class FilePreProcessJsSubset(object):
         result = ""
         in_tags = False
         for line in self.full_file_contents.split("\n"):
-            if "<script" in line.lower():
+            line = line.lower()
+            if "<script" in line and "</script" not in line:
                 in_tags = True
                 continue
-            if "</script" in line.lower():
+            if "</script" in line:
                 in_tags = False
                 continue
             if in_tags:
