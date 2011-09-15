@@ -9,6 +9,7 @@ from stats.stat_lines import StatLines
 from stats.stat_java_mean_ccn import StatJavaMeanCcn
 from stats.stat_java_ccn_func_count import StatJavaCcnFuncCount
 from stats.stat_percentage import StatPercentage
+from stats.stat_sum import StatSum
 
 class StatFactoryTests(TestCase):
     def setUp(self):
@@ -37,7 +38,11 @@ class StatFactoryTests(TestCase):
     def test_create_percentage(self):
         stat = self.sf.get_stat("percentage")
         eq_(StatPercentage, type(stat))
-        
+
+    def test_create_sum(self):
+        stat = self.sf.get_stat("sum")
+        eq_(StatSum, type(stat))
+
     def test_create_stat_with_stat_conf(self):
         conf = { "statname": "java_mean_ccn", "ccn_limit": 10 }
         stat = self.sf.get_stat("java_ccn_func_count", conf)

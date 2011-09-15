@@ -20,3 +20,9 @@ class FileMatcherGlobTests(TestCase):
         eq_(True, self.file_matcher.match("hello.java"))
         eq_(False, self.file_matcher.match("hello.java2"))
 
+    def test_glob_matcher_handles_list_of_globs(self):
+        self.file_matcher = FileMatcherGlob(["*.one", "*.two"])
+        eq_(True, self.file_matcher.match("hello.one"))
+        eq_(True, self.file_matcher.match("hello.two"))
+        eq_(False, self.file_matcher.match("hello.three"))
+
