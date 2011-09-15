@@ -24,6 +24,7 @@ class StatLines(Statistic):
         f.close()
         
         if preprocessor is not None:
+            print filename
             preprocessor.set_input(contents)
             contents = preprocessor.get_output()
         

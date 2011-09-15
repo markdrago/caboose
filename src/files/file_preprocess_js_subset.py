@@ -22,5 +22,9 @@ class FilePreProcessJsSubset(object):
                 continue
             if in_tags:
                 result += line + "\n"
+        if len(result) > 0:
+            print "##########"
+            print result
+            print "##########"
         return result
 

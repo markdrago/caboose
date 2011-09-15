@@ -112,7 +112,7 @@ class StatCollectorFactoryTests(TestCase):
         conf["dirs"] = [ subdir ]
         fp = self.scf.create_file_package_from_config(conf)
         eq_(1, len(fp.file_matchers))
-        eq_(glob, fp.file_matchers[0].glob)
+        eq_(glob, fp.file_matchers[0].get_globs()[0])
 
     def test_stat_collector_factory_creates_start_time(self):
         current = datetime(2011, 5, 26, 7, 15, 0)
