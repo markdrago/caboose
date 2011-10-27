@@ -1,6 +1,7 @@
 import nose
 from nose.tools import *
 from unittest import TestCase
+import repo_test_utils
 
 import os
 from shutil import rmtree
@@ -111,25 +112,11 @@ class MercurialRepositoryTests(TestCase):
     @nottest
     def create_test_changesets(self, repo, count=1, dates=[]):
         for i in range(count):
-            filename = self._create_random_file()
+            filename = repo_test_utils._create_random_file(self.directory)
             commands.add(repo.get_ui(), repo.get_repo(), filename)
             
             date=None
             if i < len(dates):
                 date=dates[i]
             commands.commit(repo.get_ui(), repo.get_repo(), date=date, message="creating test commit", user='Test Runner <trunner@domain.com>')
-    
-    @nottest        
-    def _create_random_file(self):
-        i = 0
-        while True:
-            filename = "file%d" % i
-            filepath = os.path.join(self.directory, filename)
-            if os.path.exists(filepath):
-                i += 1
-                continue
-            with open(filepath, 'w') as f:
-                f.write(filename)
-                f.close()
-            return filepath
 
