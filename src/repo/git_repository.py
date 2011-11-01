@@ -50,6 +50,9 @@ class GitRepository(object):
         if date is not None:
             del os.environ['GIT_COMMITTER_DATE']
     
+    def create_branch(self, branchname):
+        self.run_git("branch %s" % (branchname,))
+    
     def run_git(self, cmd):
         cmd = "git --git-dir %s/.git --work-tree %s %s" % (self.directory, self.directory, cmd)
         return self.get_cmd_output(cmd)

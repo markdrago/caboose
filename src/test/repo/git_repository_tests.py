@@ -74,7 +74,7 @@ class GitRepositoryTests(TestCase):
         #make sure when we ask for the earliest date, we get the first one
         earliest = gitrepo.get_date_of_earliest_commit()
         eq_(expected_date, earliest)
-    
+
     def test_get_revision_before_date(self):
         #create repo
         gitrepo = GitRepository(self.directory, init=True)
@@ -94,7 +94,35 @@ class GitRepositoryTests(TestCase):
         actual_sha1 = gitrepo.get_revision_before_date(datetime(2011, 10, 28, 8, 5, 45))
         eq_(target_sha1, actual_sha1)
 
-    def test_swtich_to_revision(self):
+    def test_get_revision_before_date_stays_on_current_branch(self):
+        #create repo
+        gitrepo = GitRepository(self.directory, init=True)
+        
+        #make a few commits
+        date_of_target_commit = datetime(2011, 10, 28, 8, 5, 0)
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 10, 28, 8, 4, 0))
+        self.create_single_file_add_and_commit_it(gitrepo, date=date_of_target_commit)
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 10, 28, 8, 6, 0))
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 10, 28, 8, 7, 0))
+
+        #get sha1 of target commit (since we know it is the second commit)
+        target_sha1 = gitrepo.run_git("log --format=%H --skip=2 -1")
+        target_sha1 = target_sha1.strip()
+        
+        #create a new branch and commits on it, with one commit that would be
+        #a better match for the requested date, except it is on a different branch
+        gitrepo.create_branch("newbranch")
+        gitrepo.switch_to_revision("newbranch")
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 10, 28, 8, 4, 0))
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 10, 28, 8, 5, 30))
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 10, 28, 8, 6, 0))
+
+        #make sure when we ask for sha1 of the commit before a date we get the right one
+        gitrepo.switch_to_revision("master")
+        actual_sha1 = gitrepo.get_revision_before_date(datetime(2011, 10, 28, 8, 5, 45))
+        eq_(target_sha1, actual_sha1)
+
+    def test_switch_to_revision(self):
         #create repo
         gitrepo = GitRepository(self.directory, init=True)
         
