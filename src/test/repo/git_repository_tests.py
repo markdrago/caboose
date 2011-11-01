@@ -94,6 +94,32 @@ class GitRepositoryTests(TestCase):
         actual_sha1 = gitrepo.get_revision_before_date(datetime(2011, 10, 28, 8, 5, 45))
         eq_(target_sha1, actual_sha1)
 
+    def test_swtich_to_revision(self):
+        #create repo
+        gitrepo = GitRepository(self.directory, init=True)
+        
+        #make a few commits
+        date_of_target_commit = datetime(2011, 11, 1, 7, 25, 0)
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 11, 1, 7, 24, 0))
+        self.create_single_file_add_and_commit_it(gitrepo, date=date_of_target_commit)
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 11, 1, 7, 26, 0))
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 11, 1, 7, 27, 0))
+
+        #get sha1 of target commit (since we know it is the second commit)
+        target_sha1 = gitrepo.run_git("log --format=%H --skip=2 -1")
+        target_sha1 = target_sha1.strip()
+        
+        #switch to target commit
+        gitrepo.switch_to_revision(target_sha1)
+        
+        #make sure we are on the target commit
+        result = gitrepo.run_git("rev-parse HEAD").strip()
+        eq_(target_sha1, result)
+
+    def test_get_base_directory(self):
+        gitrepo = GitRepository(self.directory, init=True)
+        eq_(self.directory, gitrepo.get_base_directory())
+
     @nottest
     def create_single_file_add_and_commit_it(self, gitrepo, date=None):
         self.create_single_file_and_add_to_repository(gitrepo)

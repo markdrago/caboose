@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from subprocess import Popen, PIPE
 
-class GitRepository:
+class GitRepository(object):
     def __init__(self, directory, init=False):
         self.directory = directory
         if init:
@@ -28,6 +28,12 @@ class GitRepository:
         datestr = date.isoformat()
         cmd = "log --before=%s -1 --format=%%H" % (datestr,)
         return self.run_git(cmd).strip()
+    
+    def switch_to_revision(self, rev):
+        self.run_git("checkout -q %s" % (rev,))
+
+    def get_base_directory(self):
+        return self.run_git("rev-parse --show-toplevel").strip()
     
     def add(self, filename):
         self.run_git("add %s" % (filename,))
