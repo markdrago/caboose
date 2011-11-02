@@ -19,6 +19,11 @@ class FileMatcherGlobTests(TestCase):
         self.file_matcher = FileMatcherGlob("*.java")
         eq_(True, self.file_matcher.match("hello.java"))
         eq_(False, self.file_matcher.match("hello.java2"))
+        
+    def test_file_matcher_matches_against_unicode_glob(self):
+        self.file_matcher = FileMatcherGlob(u"*.java")
+        eq_(True, self.file_matcher.match("hello.java"))
+        eq_(False, self.file_matcher.match("hello.java2"))
 
     def test_glob_matcher_handles_list_of_globs(self):
         self.file_matcher = FileMatcherGlob(["*.one", "*.two"])

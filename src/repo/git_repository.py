@@ -10,6 +10,13 @@ class GitRepository(object):
         if not os.path.isdir(os.path.join(self.directory, '.git')):
             raise GitRepositoryException("not a git directory")
 
+        #TODO: this is a hack which basically means that this will only work on
+        #the git branch named 'master'.  At the time it was added the immediate
+        #goal was to have the test which is named
+        #test_get_revision_before_date_can_find_commits_later_than_current_working_directory
+        #pass by passing a commit to git-log in the methods below.
+        self.branch = "master"
+
     def init_repository(self):
         if not os.path.isdir(self.directory):
             os.makedirs(self.directory)
@@ -19,16 +26,17 @@ class GitRepository(object):
         #TODO: this is kind of gross as it gets the dates of all commits and then 
         #just takes the first line of output.  "-1" in git does not do what we
         #want here, but there's probably still a better way
-        output = self.run_git("log --date-order --reverse --format=%cd --date=iso")
+        output = self.run_git("log --date-order --reverse --format=%%cd --date=iso %s" % (self.branch,))
         output = output.split("\n")
         datestr = output[0]
         return self.convert_git_date_to_datetime(datestr)
     
     def get_revision_before_date(self, date):
         datestr = date.isoformat()
-        cmd = "log --before=%s -1 --format=%%H" % (datestr,)
-        return self.run_git(cmd).strip()
-    
+        cmd = "log --before=%s -1 --format=%%H %s" % (datestr, self.branch)
+        rev = self.run_git(cmd).strip()
+        return rev
+
     def switch_to_revision(self, rev):
         self.run_git("checkout -q %s" % (rev,))
 

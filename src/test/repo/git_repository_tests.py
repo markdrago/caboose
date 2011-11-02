@@ -122,6 +122,28 @@ class GitRepositoryTests(TestCase):
         actual_sha1 = gitrepo.get_revision_before_date(datetime(2011, 10, 28, 8, 5, 45))
         eq_(target_sha1, actual_sha1)
 
+    def test_get_revision_before_date_can_find_commits_later_than_current_working_directory(self):
+        #create repo
+        gitrepo = GitRepository(self.directory, init=True)
+        
+        #make a few commits
+        target_date = datetime(2011, 11, 1, 20, 38, 0)
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 11, 1, 20, 35, 0))
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 11, 1, 20, 36, 0))
+        self.create_single_file_add_and_commit_it(gitrepo, date=datetime(2011, 11, 1, 20, 37, 0))
+        self.create_single_file_add_and_commit_it(gitrepo, date=target_date)
+
+        #get sha1 of an early and a late commit
+        early_sha1 = gitrepo.run_git("log --format=%H --skip=2 -1").strip()
+        late_sha1 = gitrepo.run_git("log --format=%H -1").strip()
+       
+        #switch to early_sha1
+        gitrepo.switch_to_revision(early_sha1)
+        
+        #make sure when we ask for sha1 of the commit before a date we get the right one
+        actual_sha1 = gitrepo.get_revision_before_date(datetime(2011, 11, 1, 20, 38, 30))
+        eq_(late_sha1, actual_sha1)
+
     def test_switch_to_revision(self):
         #create repo
         gitrepo = GitRepository(self.directory, init=True)
