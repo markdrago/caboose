@@ -9,6 +9,9 @@ class FilePreProcessJsSubset(object):
     def set_input(self, contents):
         self.full_file_contents = contents
     
+    def set_config(self, conf):
+        pass
+    
     def get_output(self):
         result = ""
         in_tags = False
