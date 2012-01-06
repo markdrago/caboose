@@ -1,5 +1,6 @@
 import os
 import stat
+import glob
 
 class FilePackageFactory(object):
     @classmethod
@@ -8,26 +9,34 @@ class FilePackageFactory(object):
 
 class FilePackage(object):
     def __init__(self):
-        self.directories = []
+        self.directories = set()
         self.excluded_directories = []
         self.file_matchers = []
         self.basedir = None
     
     def set_basedir(self, basedir):
         self.basedir = basedir
-    
+
     def add_directory(self, directory):
-        self.directories.append(directory)
-    
+        """if directory contains a *, ?, or [ we consider it to be a
+        glob beneath the basedir, otherwise we just add it"""
+        if "*" in directory or "?" in directory or "[" in directory:
+            self.add_directory_glob(directory)
+        else:
+            self.directories.add(directory)
+
+    def add_directory_glob(self, pattern):
+        #treat directory like a glob beneath basedir
+        for subdir in os.listdir(self.basedir):
+            statinfo = os.stat(os.path.join(self.basedir, subdir))
+            if not stat.S_ISDIR(statinfo[stat.ST_MODE]):
+                continue
+            if glob.fnmatch.fnmatch(subdir, pattern):
+                self.directories.add(subdir)
+
     def add_directories(self, *args):
         for directory in args:
             self.add_directory(directory)
-
-    def add_basedir_subdirectories(self):
-        for subdir in os.listdir(self.basedir):
-            statinfo = os.stat(os.path.join(self.basedir, subdir))
-            if stat.S_ISDIR(statinfo[stat.ST_MODE]):
-                self.add_directory(subdir)
 
     def exclude_directory(self, directory):
         self.excluded_directories.append(directory)

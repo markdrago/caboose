@@ -40,13 +40,11 @@ class FilePackageTests(TestCase):
         eq_(expected, set(fp.get_directories()))
 
     def test_file_package_add_basedir_subdirs(self):
-        basedir = mkdtemp('-caboose-file-iterator-tests')
+        basedir = mkdtemp('-caboose-file-package-tests')
 
-        expected_dirs = set()
-        for subdir in ("dir1", "dir2", "dir3"):
-            newdir = os.path.join(basedir, subdir)
-            os.mkdir(newdir)
-            expected_dirs.add(newdir)
+        expected_dirs = set(("dir1", "dir2", "dir3"))
+        self.produce_fake_directories(basedir, expected_dirs)
+        expected_dirs = [os.path.join(basedir, name) for name in expected_dirs]
 
         #add a file which should be ignored as it is not a directory
         filepath = os.path.join(basedir, "file1")
@@ -55,11 +53,24 @@ class FilePackageTests(TestCase):
 
         fp = FilePackage()
         fp.set_basedir(basedir)
-        fp.add_basedir_subdirectories()
+        fp.add_directory("*")
 
-        eq_(expected_dirs, set(fp.get_directories()))
+        eq_(set(expected_dirs), set(fp.get_directories()))
 
         rmtree(basedir)
+
+    def test_file_package_includes_globbed_directories(self):
+        basedir = mkdtemp('-caboose-file-package-tests2')
+        dirs = ("1dir", "2dir", "different")
+        self.produce_fake_directories(basedir, dirs)
+
+        #create a file package which uses a globbed directory name
+        fp = FilePackage()
+        fp.set_basedir(basedir)
+        fp.add_directory("*dir")
+
+        expected = [os.path.join(basedir, name) for name in ("1dir", "2dir")]
+        eq_(set(expected), set(fp.get_directories()))
 
     def test_file_package_excludes_excluded_directories(self):
         fp = FilePackage()
@@ -68,6 +79,12 @@ class FilePackageTests(TestCase):
         fp.exclude_directory("dir3")
         fp.exclude_directories("dir4", "dir5")
         eq_(set(("dir1", "dir2")), set(fp.get_directories()))
+
+    @nottest
+    def produce_fake_directories(self, basedir, dirs):
+        for subdir in dirs:
+            newdir = os.path.join(basedir, subdir)
+            os.mkdir(newdir)
 
 class MockFileMatcher(object):
     def match(self):

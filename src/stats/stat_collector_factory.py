@@ -61,7 +61,7 @@ class StatCollectorFactory(object):
         fp = self.file_package_factory.get_file_package()
         fp.set_basedir(conf['repodir'])
         if 'dirs' not in conf or conf['dirs'] == '*':
-            fp.add_basedir_subdirectories()
+            fp.add_directory("*")
         else:
             fp.add_directories(*conf['dirs'])
 

@@ -64,14 +64,14 @@ class StatCollectorFactoryTests(TestCase):
         conf["repodir"] = basedir
         conf["dirs"] = '*'
         fp = self.scf.create_file_package_from_config(conf)
-        ok_(self.mock_file_package_factory.get_file_package().add_basedir_subdirs_was_called)
+        eq_("*", self.mock_file_package_factory.get_file_package().dirs[0])
 
     def test_stat_collector_factory_creates_file_package_with_subdirs_when_dirs_omitted(self):
         basedir = "/home/mdrago/repository_lives_here"
         conf = {}
         conf["repodir"] = basedir
         fp = self.scf.create_file_package_from_config(conf)
-        ok_(self.mock_file_package_factory.get_file_package().add_basedir_subdirs_was_called)
+        ok_(self.mock_file_package_factory.get_file_package().dirs[0])
 
     def test_stat_collector_factory_creates_file_package_with_excluded_dirs(self):
         basedir = "/home/mdrago/repository_lives_here"
@@ -198,7 +198,6 @@ class MockFilePackage(object):
     def __init__(self):
         self.dirs = []
         self.excluded_dirs = []
-        self.add_basedir_subdirs_was_called = False
 
     def add_directory(self, directory):
         self.dirs.append(directory)
@@ -219,9 +218,6 @@ class MockFilePackage(object):
 
     def file_matchers(self):
         pass
-
-    def add_basedir_subdirectories(self):
-        self.add_basedir_subdirs_was_called = True
 
 class MockFileIteratorFactory(object):
     def __init__(self):
