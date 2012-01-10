@@ -23,7 +23,7 @@ class StatCollectorFactoryTests(TestCase):
 
         self.mock_file_package_factory = MockFilePackageFactory()
         self.scf.set_file_package_factory(self.mock_file_package_factory)
-        
+
         self.mock_file_iterator_factory = MockFileIteratorFactory()
         self.scf.set_file_iterator_factory(self.mock_file_iterator_factory)
 
@@ -58,11 +58,20 @@ class StatCollectorFactoryTests(TestCase):
         fp = self.scf.create_file_package_from_config(conf)
         eq_(subdir, self.mock_file_package_factory.get_file_package().dirs[0])
 
+    @raises(Exception)
+    def test_stat_collector_factory_raises_exception_with_dirs_as_string(self):
+        "the dirs setting has to be a list and not a string"
+        basedir = "/home/mdrago/repository_lives_here"
+        conf = {}
+        conf["repodir"] = basedir
+        conf["dirs"] = "a_string"
+        self.scf.create_file_package_from_config(conf)
+
     def test_stat_collector_factory_creates_file_package_with_subdirs(self):
         basedir = "/home/mdrago/repository_lives_here"
         conf = {}
         conf["repodir"] = basedir
-        conf["dirs"] = '*'
+        conf["dirs"] = ['*']
         fp = self.scf.create_file_package_from_config(conf)
         eq_("*", self.mock_file_package_factory.get_file_package().dirs[0])
 
@@ -82,7 +91,7 @@ class StatCollectorFactoryTests(TestCase):
         expected = set(("dir1", "dir2"))
         actual = set(self.mock_file_package_factory.get_file_package().excluded_dirs)
         eq_(expected, actual)
-        
+
     def test_stat_collector_factory_creates_file_iterator(self):
         basedir = "/home/mdrago/repository_lives_here"
         subdir = "TestProject"
@@ -144,7 +153,7 @@ class StatCollectorFactoryTests(TestCase):
 class MockResultsStatCollectorFactory(object):
     def __init__(self, stat):
         self.rsc = MockResultsStatCollector(stat)
-    
+
     def get_results_stat_collector(self, stat):
         return self.rsc
 
@@ -180,7 +189,7 @@ class MockStatFactory(object):
 
     def get_last_stat_created(self):
         return self.last_stat_created
-    
+
     def get_last_config_passed(self):
         return self.last_config_passed
 
@@ -222,7 +231,7 @@ class MockFilePackage(object):
 class MockFileIteratorFactory(object):
     def __init__(self):
         self.file_iterator = MockFileIterator()
-    
+
     def get_file_iterator(self, filepackages=None):
         self.file_iterator.set_filepackages(filepackages)
         return self.file_iterator

@@ -60,9 +60,12 @@ class StatCollectorFactory(object):
     def create_file_package_from_config(self, conf):
         fp = self.file_package_factory.get_file_package()
         fp.set_basedir(conf['repodir'])
-        if 'dirs' not in conf or conf['dirs'] == '*':
+        if 'dirs' not in conf:
             fp.add_directory("*")
         else:
+            if (isinstance(conf['dirs'], str) or
+                isinstance(conf['dirs'], unicode)):
+                raise Exception("dirs configuration must be a list")
             fp.add_directories(*conf['dirs'])
 
         if 'exclude_dirs' in conf:
@@ -71,7 +74,7 @@ class StatCollectorFactory(object):
         if 'glob' in conf:
             fm = FileMatcherGlob(conf['glob'])
             fp.add_file_matcher(fm)
-        
+
         return fp
 
     def get_start_time_from_config(self, conf):
@@ -95,7 +98,7 @@ class StatCollectorFactory(object):
 
     def set_file_package_factory(self, factory):
         self.file_package_factory = factory
-    
+
     def set_file_iterator_factory(self, factory):
         self.file_iterator_factory = factory
 
